@@ -27,7 +27,13 @@
   },
   "dependencies": {
     "babel-preset-stage-1": "^6.1.18",
+    "docxtemplater": "^3.1.7",
+    "fs": "0.0.1-security",
+    "jszip": "^3.1.4",
     "lodash": "^3.10.1",
+    "moment": "^2.18.1",
+    "number-to-words": "^1.2.3",
+    "path": "^0.12.7",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-dropzone": "^4.1.2",
