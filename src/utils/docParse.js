@@ -1,5 +1,6 @@
 import XLSX from 'xlsx';
 import path from 'path';
+import moment from 'moment';
 
 export default function docParse(fileBinary){
   const workbook = XLSX.read(fileBinary, {type: 'binary'});
@@ -58,6 +59,8 @@ export default function docParse(fileBinary){
     PENSIONS_A: getCellValue('K137', 0),
     PENSIONS_B: getCellValue('M137', 0)
   }
+
+  //pass in the cell coordinates, sheet number, and format (when it is a date) and return the cell value.
 function getCellValue(cellAddress, sheetNumber, cellFormat){
   let output_value;
   const first_sheet_name = workbook.SheetNames[sheetNumber];
@@ -66,11 +69,20 @@ function getCellValue(cellAddress, sheetNumber, cellFormat){
   const desired_cell = worksheet[address_of_cell];
   let desired_value = (desired_cell ? desired_cell.v : undefined);
   if ((cellFormat == 'd') && (typeof desired_value == 'number')){
-    output_value = XLSX.SSF.parse_date_code(desired_value);
+    let unParsedDate = XLSX.SSF.parse_date_code(desired_value);
+    output_value = parseExcelDate(unParsedDate);
   } else {
     output_value = desired_value;
   }
   return output_value;
 }
+
+function parseExcelDate(unParsedDate){
+  //ensure that day and month are double digits (e.g. 01 for january or the first of the month) which ensures that moment parses the date correctly
+  unParsedDate.d = ('0' + unParsedDate.d).slice(-2);
+  unParsedDate.m = ('0' + unParsedDate.m).slice(-2);
+  return moment(`${unParsedDate.y}${unParsedDate.m}${unParsedDate.d}`, "YYYY-MM-DD");
+}
+
 return MoUInput;
 }
