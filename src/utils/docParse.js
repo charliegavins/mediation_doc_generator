@@ -1,10 +1,7 @@
 import XLSX from 'xlsx';
 import path from 'path';
 import moment from 'moment';
-
-function capitalise(string){
-return string.charAt(0).toUpperCase() + string.slice(1);
-};
+import dT from './dataTransform';
 
 export default function docParse(fileBinary){
   const workbook = XLSX.read(fileBinary, {type: 'binary'});
@@ -74,14 +71,13 @@ export default function docParse(fileBinary){
 
     //if cell format is a date ('d' passed through as an argument) and a check whether it is a number, then take the excel date format, and parse it into a moment date.
     if ((dateFormat == ('dm')) && (typeof desired_value == 'number') || (dateFormat == ('dd')) && (typeof desired_value == 'number')){
-      output_value = parseExcelDate(desired_value, dateFormat);
+      output_value = dT.parseExcelDate(desired_value, dateFormat);
     }
     if (desired_value == undefined){
       output_value = 'X';
     }
     if (_.isString(desired_value)){
-      output_value = capitalise(desired_value);
-      console.log(output_value);
+      output_value = dT.capitalise(desired_value);
     }
     if (_.isNumber(desired_value) && (!dateFormat)){
       output_value = _.round((desired_value), 2);
@@ -91,17 +87,6 @@ export default function docParse(fileBinary){
     }
     return output_value;
   }
-
-//take date from excel code to XLSX parsed, to moment formatted (e.g. 1st January 2017)
-function parseExcelDate(unParsedDate, dateFormat){
-  if (dateFormat == 'dd'){
-    return moment(XLSX.SSF.parse_date_code(unParsedDate)).format('Do MMMM YYYY');
-  }
-  if (dateFormat == 'dm'){
-    return moment(XLSX.SSF.parse_date_code(unParsedDate)).format('MMMM YYYY');
-  }
-
-}
 
 return MoUInput;
 }

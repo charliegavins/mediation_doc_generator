@@ -6,32 +6,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import { saveAs } from 'file-saver';
 import ntow from 'number-to-words';
-
-//this takes the title from the database and assigns a gender for the paragraph generation
-function titleGenderConversion(title, type){
-  if ((title = 'Mr') && (type != 'posses')){
-    return 'he'
-  }
-  if ((title = 'Mrs') && (type != 'posses')){
-    return 'she'
-  }
-  if ((title = 'Ms') && (type != 'posses')){
-    return 'she'
-  }
-  if ((title = 'Mr') && (type = 'posses')){
-    return 'his'
-  }
-  if ((title = 'Mrs') && (type = 'posses')){
-    return 'her'
-  }
-  if ((title = 'Ms') && (type = 'posses')){
-    return 'her'
-  }
-}
-//take all of these 'helper' functions into a separate JS file - including the date parser etc - will tidy every thing up 
-function capitalise(string){
-return string.charAt(0).toUpperCase() + string.slice(1);
-};
+import dT from './dataTransform';
 
 export default function docGen(data, MoUInput){
       var zip = new JSZip(MoUInput.data);
@@ -40,21 +15,23 @@ export default function docGen(data, MoUInput){
         case_number: data.case_number,
         mediator_first_name: data.mediator_first_name,
         mediator_last_name: data.mediator_last_name,
-        number_of_sessions: capitalise(ntow.toWords(data.number_of_sessions)),
-        date_of_mediation_start: data.date_of_mediation_start,
-        date_of_mediation_end: data.date_of_mediation_end,
+        number_of_sessions: dT.capitalise(ntow.toWords(data.number_of_sessions)),
+        date_of_mediation_start: dT.ddmmyy(data.date_of_mediation_start),
+        date_of_mediation_end: dT.ddmmyy(data.date_of_mediation_end),
         legal_advice: data.legal_advice,
-        date_married: data.date_married,
-        date_cohabited: data.date_cohabited,
-        date_separated: data.date_separated,
+        date_married: dT.ddmmyy(data.date_married),
+        date_cohabited: dT.mmyy(data.date_cohabited),
+        date_separated: dT.mmyy(data.date_separated),
         title_a: data.title_a,
         title_b: data.title_b,
         first_name_a: data.first_name_a,
         first_name_b: data.first_name_b,
         last_name_a: data.last_name_a,
         last_name_b: data.last_name_b,
-        dob_a: data.dob_a,
-        dob_b: data.dob_b,
+        dob_a: dT.ddmmyy(data.dob_a),
+        dob_b: dT.ddmmyy(data.dob_b),
+        age_a: dT.ageFromDoB(data.dob_a),
+        age_b: dT.ageFromDoB(data.dob_b),
         occupation_a: data.occupation_a,
         occupation_b: data.occupation_b,
         new_partner_a: data.new_partner_a,
@@ -87,7 +64,6 @@ export default function docGen(data, MoUInput){
 
       try {
           // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-          console.log(doc);
           doc.render()
       }
       catch (error) {
