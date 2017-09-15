@@ -4,6 +4,7 @@ import moment from 'moment';
 import dT from './dataTransform';
 
 export default function docParse(fileBinary){
+  console.log('ping');
   const workbook = XLSX.read(fileBinary, {type: 'binary'});
   const first_sheet_name = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[first_sheet_name];
