@@ -59,9 +59,10 @@ export default function docGen(data, MoUInput){
         other_assets_a: data.other_assets_a,
         other_assets_b: data.other_assets_b,
         pensions_a: data.pensions_a,
-        pensions_b: data.pensions_b
-        footer_date: moment(data.date_of_mediation_end).format('DD-MM-YY');
-        footer_info: dT.footerInfo(data);
+        pensions_b: data.pensions_b,
+        footer_date: moment(data.date_of_mediation_end).format('DD-MM-YY'),
+        footer_info: dT.footerInfo(data)
+        // number_of_children: dT.childrenCount(data)
       });
 
       try {
@@ -84,5 +85,6 @@ export default function docGen(data, MoUInput){
           type:"blob",
           mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       }) //Output the document using Data-URI
+      dT.childCheck(data);
       saveAs(out,dT.fileName(data));
   };

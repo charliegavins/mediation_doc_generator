@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import fileReducer from './file.reducer';
 
 const rootReducer = combineReducers({
-  state: (state = {}) => state
+  file: fileReducer
 });
 
 export default rootReducer;

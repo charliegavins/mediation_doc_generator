@@ -43,10 +43,33 @@ function fileName(data){
 
 function footerInfo(data){
   if (data.last_name_a == data.last_name_b){
-  return `${data.case_number} ${data.last_name_b} / Abingdon Family Mediation`;
+  return `case:${data.case_number} ${data.last_name_b}`;
 } else {
-  return `${data.case_number} ${data.last_name_a} ${data.last_name_b} / Abingdon Family Mediation`;
+  return `${data.case_number} ${data.last_name_a} ${data.last_name_b}`;
 }
+}
+
+function childCheck(data){
+  console.log('childCheck');
+  console.log(data.child_1_dob);
+  console.log(data.child_1_name);
+  if ((data.child_1_name=='X') && (data.child_1_dob=='X')){
+    console.log('no children');
+  }
+  // child_1_name: getCellValue('B37', 4),
+  // child_1_dob: getCellValue('B40', 4),
+  // child_2_name: getCellValue('B49', 4),
+  // child_2_dob: getCellValue('B52', 4),
+  // child_3_name: getCellValue('B61', 4),
+  // child_3_dob: getCellValue('B64', 4),
+  // child_4_name: getCellValue('B73', 4),
+  // child_4_dob: getCellValue('B76', 4),
+  // child_5_name: getCellValue('B85', 4),
+  // child_5_dob: getCellValue('B88', 4),
+  // child_6_name: getCellValue('B97', 4),
+  // child_6_dob: getCellValue('B100', 4),
+  // child_7_name: getCellValue('B109', 4),
+  // child_7_dob: getCellValue('B112', 4)
 }
 
 //take moment format and
@@ -70,5 +93,6 @@ export default {
   titleGenderConversion,
   capitalise,
   parseExcelDate,
-  ageFromDoB
+  ageFromDoB,
+  childCheck
 }

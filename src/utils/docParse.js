@@ -4,7 +4,6 @@ import moment from 'moment';
 import dT from './dataTransform';
 
 export default function docParse(fileBinary){
-  console.log('ping');
   const workbook = XLSX.read(fileBinary, {type: 'binary'});
   const first_sheet_name = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[first_sheet_name];
@@ -45,8 +44,6 @@ export default function docParse(fileBinary){
     good_health_b: getCellValue('E31', 4),
     good_health_description_a: getCellValue('B32', 4),
     good_health_description_b: getCellValue('E32', 4),
-
-
     family_home_a: getCellValue('K130', 0),
     family_home_b: getCellValue('M130', 0),
     other_property_a: getCellValue('K131', 0),
@@ -60,7 +57,21 @@ export default function docParse(fileBinary){
     other_assets_a: getCellValue('K135', 0),
     other_assets_b: getCellValue('M135', 0),
     pensions_a: getCellValue('K137', 0),
-    pensions_b: getCellValue('M137', 0)
+    pensions_b: getCellValue('M137', 0),
+    child_1_name: getCellValue('B37', 4),
+    child_1_dob: getCellValue('B40', 4),
+    child_2_name: getCellValue('B49', 4),
+    child_2_dob: getCellValue('B52', 4),
+    child_3_name: getCellValue('B61', 4),
+    child_3_dob: getCellValue('B64', 4),
+    child_4_name: getCellValue('B73', 4),
+    child_4_dob: getCellValue('B76', 4),
+    child_5_name: getCellValue('B85', 4),
+    child_5_dob: getCellValue('B88', 4),
+    child_6_name: getCellValue('B97', 4),
+    child_6_dob: getCellValue('B100', 4),
+    child_7_name: getCellValue('B109', 4),
+    child_7_dob: getCellValue('B112', 4)
   }
 
   //pass in the cell coordinates, sheet number, and format (when it is a date) and return the cell value.

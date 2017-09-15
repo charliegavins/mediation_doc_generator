@@ -10,6 +10,8 @@ class App extends Component {
     this.state = { files: [] }
   }
 
+
+
   onDrop(acceptedFiles){
   acceptedFiles.forEach(file => {
     const reader = new FileReader();
