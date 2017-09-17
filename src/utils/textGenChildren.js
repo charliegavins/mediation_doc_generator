@@ -1,6 +1,7 @@
 import ntow from 'number-to-words';
 
 function textGenChild(data){
+  console.log(data);
   let i = 0;
   let numberOfChildren = data.child_info.length;
   let paragraph = `We have ${ntow.toWords(numberOfChildren)} children. `;
@@ -19,7 +20,7 @@ function textGenChild(data){
     paragraph = `${paragraph} ${paraLastComponent}`
     }
   })
-  return paragraph
+  return paragraph;
 }
 
 export default {

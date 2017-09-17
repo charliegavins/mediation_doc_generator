@@ -9,8 +9,8 @@ import ntow from 'number-to-words';
 import dT from './dataTransform';
 import tGC from './textGenChildren';
 
-export default function docGen(data, MoUInput){
-      var zip = new JSZip(MoUInput.data);
+export default function docxGen(data, template){
+      var zip = new JSZip(template);
       var doc= new Docxtemplater().loadZip(zip)
       doc.setData({
         case_number: data.case_number,
@@ -63,7 +63,7 @@ export default function docGen(data, MoUInput){
         pensions_b: data.pensions_b,
         footer_date: data.footer_date,
         footer_info: dT.footerInfo(data),
-        child_para: tGC.textGenChild(data)
+        child_paragraph: tGC.textGenChild(data)
       });
 
       try {
@@ -86,5 +86,6 @@ export default function docGen(data, MoUInput){
           type:"blob",
           mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       }) //Output the document using Data-URI
+      console.log(doc);
       saveAs(out,dT.fileName(data));
   };

@@ -1,11 +1,11 @@
 import { IMPORT_FILE } from '../actions';
+import docxGen from '../utils/docxGen';
 
 export default function(state = {}, action){
-  console.log('action recieved', action);
-  // switch(action.type){
-  //   case IMPORT_FILE:
-  //   return { ...state, 'file': action.payload.data};
-  //   default:
+  switch(action.type){
+    case IMPORT_FILE:
+    return { ...state, 'file': action.payload};
+    default:
     return state;
-  // }
 }
+};
