@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
 import { importFile } from '../actions';
 
-class App extends Component {
+class DropFile extends Component {
 
   constructor() {
     super()
@@ -13,16 +13,17 @@ class App extends Component {
 
 
   onDrop(acceptedFiles){
-  acceptedFiles.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const fileAsBinaryString = reader.result;
-      this.props.importFile(fileAsBinaryString);
-    };
-    reader.onabort = () => console.log('file reading was aborted');
-    reader.onerror = () =>console.log('file reading has failed');
-    reader.readAsBinaryString(file);
-        });
+    acceptedFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const fileAsBinaryString = reader.result;
+        this.props.importFile(fileAsBinaryString);
+      };
+      reader.onabort = () => console.log('file reading was aborted');
+      reader.onerror = () =>console.log('file reading has failed');
+
+      reader.readAsBinaryString(file);
+    });
   }
 
 
@@ -48,4 +49,4 @@ class App extends Component {
   }
 }
 
-export default connect(null, { importFile })(App);
+export default connect(null, { importFile })(DropFile);
