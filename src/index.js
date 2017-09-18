@@ -14,3 +14,14 @@ ReactDOM.render(
     <DropFile />
   </Provider>
   , document.querySelector('.container'));
+
+
+///speed test for app:
+// function someMethodIThinkMightBeSlow() {
+//     const startTime = performance.now();
+//
+//     // Do the normal stuff for this function
+//
+//     const duration = performance.now() - startTime;
+//     console.log(`someMethodIThinkMightBeSlow took ${duration}ms`);
+// }

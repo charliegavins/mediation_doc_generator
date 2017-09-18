@@ -15,7 +15,7 @@ export function importFile(fileBinary){
   //   }
   // })
   const data = xlsParse(fileBinary);
-  const docxTemplate = axios.get(`${ROOT_URL}MOU_input`);
+  const docxTemplate = axios.get(`${ROOT_URL}docx_template`);
   docxTemplate.then(function(res){
     let template = res.data;
     docxGen(data, template);

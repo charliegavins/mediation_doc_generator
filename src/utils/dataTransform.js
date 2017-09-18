@@ -2,26 +2,30 @@ import moment from 'moment';
 import XLSX from 'xlsx';
 
 //this takes the title from the database and assigns a gender for the paragraph generation
-function titleGenderConversion(title, type){
-  if ((title = 'Mr') && (type != 'posses')){
+function titleToPronoun(title, type){
+  if ((title == 'Mr') && (type != 'posses')){
     return 'he'
   }
-  if ((title = 'Mrs') && (type != 'posses')){
+  if ((title == 'Mrs') && (type != 'posses')){
     return 'she'
   }
-  if ((title = 'Ms') && (type != 'posses')){
+  if ((title == 'Ms') && (type != 'posses')){
     return 'she'
   }
-  if ((title = 'Mr') && (type = 'posses')){
+  if ((title == 'Mr') && (type == 'posses')){
     return 'his'
   }
-  if ((title = 'Mrs') && (type = 'posses')){
+  if ((title == 'Mrs') && (type == 'posses')){
     return 'her'
   }
-  if ((title = 'Ms') && (type = 'posses')){
+  if ((title == 'Ms') && (type == 'posses')){
     return 'her'
   }
 }
+
+function addZero(number){
+    return ("0" + number).slice(-2);
+};
 
 //take all of these 'helper' functions into a separate JS file - including the date parser etc - will tidy every thing up
 function capitalise(string){
@@ -30,12 +34,17 @@ return string.charAt(0).toUpperCase() + string.slice(1);
 
 //take date from excel code to XLSX parsed, to moment formatted
 function parseDate(unParsedDate, dateFormat){
-  let parsedDate = moment(XLSX.SSF.parse_date_code(unParsedDate));
+//take excel code and format it to object e.g. { d:25, m:12, y:2017 }
+  let semiParsedDate = XLSX.SSF.parse_date_code(unParsedDate);
+//take the object and convert into a string so moment can comprehend e.g. '25-12-2017', ensuring that single digits have a leading zero
+  let semiParsedDateString = `${addZero(semiParsedDate['d'])}-${addZero(semiParsedDate['m'])}-${semiParsedDate['y']}`
+//parse date to create a moment object, passing in the format as an argument to 'help' moment calculate
+  let parsedDate = moment(semiParsedDateString, 'DD-MM-YYYY');
   if (dateFormat == 'age'){
     let age = ageParse(parsedDate);
     return age;
   } else {
-    let date = moment(parsedDate._d).format(dateFormat);
+    let date = moment(parsedDate).format(dateFormat);
     return date;
   }
 };
@@ -66,20 +75,21 @@ function ageParse(date){
 }
 
 function fileName(data){
-  if (data.last_name_a == data.last_name_b){
-  return `${data.case_number} ${data.last_name_b} MOU.docx`
+  if (data.partner_a.last_name == data.partner_b.last_name){
+  return `${data.case.case_number} ${data.partner_a.last_name} MOU.docx`
 } else {
-  return `${data.case_number} ${data.last_name_a} ${data.last_name_b} MOU.docx`
+  return `${data.case.case_number} ${data.partner_a.last_name} ${data.partner_b.last_name} MOU.docx`
 }
 }
 
 function footerInfo(data){
-  if (data.last_name_a == data.last_name_b){
-  return `case:${data.case_number} ${data.last_name_b}`;
+  if (data.partner_a.last_name == data.partner_b.last_name){
+  return `case:${data.case.case_number} ${data.partner_a.last_name}`;
 } else {
-  return `${data.case_number} ${data.last_name_a} ${data.last_name_b}`;
+  return `${data.case.case_number} ${data.partner_a.last_name} ${data.partner_b.last_name}`;
 }
 };
+
 
 function childCheck(data){
   const X = 'X';
@@ -126,7 +136,7 @@ function ageFromDoB(dateString){
 export default {
   fileName,
   footerInfo,
-  titleGenderConversion,
+  titleToPronoun,
   capitalise,
   parseDate,
   ageFromDoB,
