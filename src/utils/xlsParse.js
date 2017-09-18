@@ -25,7 +25,9 @@ case: {
   date_cohabited: getCellValue('B11', 4, 'MMMM YYYY'),
   date_separated: getCellValue('B12', 4, 'MMMM YYYY'),
   cohabiting: getCellValue('B14', 4),
-  child_info: parseChildren()
+  child_info: parseChildren(),
+  court_orders: getCellValue('B15', 4),
+  court_order_info: getCellValue('B16', 4),
 },
     partner_a: {
           title: getCellValue('B22', 4),
@@ -110,12 +112,13 @@ case: {
           dob: getCellValue('B112', 4, 'Do MMMM YYYY'),
           age: getCellValue('B112', 4, 'age')
         }
-      ]
-  child_info.map(function(value, index){
-    if (value.name == 'X' || value.dob == 'X'){
-      child_info.splice(index, 1);
-    }
-  });
+      ];
+      for (let i=child_info.length-1;i>=0;i--){
+        console.log(i);
+        if ((child_info[i].name == undefined) || (child_info[i].dob == undefined)){
+          child_info.splice(i, 1);
+        }
+      }
     return child_info;
   }
 
@@ -131,7 +134,7 @@ case: {
       output_value = dT.parseDate(desired_value, dateFormat);
     }
     if (desired_value == undefined){
-      output_value = 'X';
+      output_value = undefined;
     }
     if (_.isString(desired_value)){
       output_value = dT.capitalise(desired_value);

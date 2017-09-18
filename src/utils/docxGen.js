@@ -63,12 +63,14 @@ export default function docxGen(data, template){
         pensions_b: data.partner_b.pensions,
         footer_date: data.doc.footer_date,
         footer_info: dT.footerInfo(data),
-        child_paragraph: tG.childParagraph(data.case.child_info),
+        child_paragraph: tG.children(data.case.child_info),
         health_a: tG.health(data, 'a'),
         health_b: tG.health(data, 'b'),
         relationship_status_a: tG.relationshipStatus(data.partner_a),
         relationship_status_b: tG.relationshipStatus(data.partner_b),
-        living_arrangements_paragraph: tG.livingArrangementsParagraph(data)
+        living_arrangements_paragraph: tG.livingArrangements(data),
+        court_orders_paragraph: tG.courtOrders(data.case),
+        child_list: tG.childList(data.case.child_info)
       });
 
       try {

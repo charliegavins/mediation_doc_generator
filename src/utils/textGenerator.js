@@ -1,7 +1,7 @@
 import ntow from 'number-to-words';
 import dT from './dataTransform'
 
-function livingArrangementsParagraph(data){
+function livingArrangements(data){
   if (data.case.cohabiting==true){
     if(data.partner_a.address){
       let paragraph = `During mediation both ${data.partner_a.first_name} and ${data.partner_b.first_name} have been living at ${data.partner_a.address}`;
@@ -17,7 +17,7 @@ function livingArrangementsParagraph(data){
   }
 }
 
-function childParagraph(child_info){
+function children(child_info){
   let i = 0;
   let numberOfChildren = child_info.length;
   let paragraph = `We have ${ntow.toWords(numberOfChildren)} children. `;
@@ -134,9 +134,52 @@ if ((partner == 'b') && (data.partner_b.good_health == false)){
 return `${dT.capitalise(pronoun)} ${phrase}`;
 };
 
+function courtOrders(case_info){
+  console.log(case_info);
+  if (case_info.court_orders == false){
+    let paragraph =  'We have not been involved in any court proceedings and there are no court orders in force.';
+    console.log(paragraph);
+    return 'We have not been involved in any court proceedings and there are no court orders in force.';
+  } else if (case_info.court_orders == true){
+        let paragraph = `${case_info.court_order_info}`;
+    console.log(paragraph);
+return paragraph;
+  }
+}
+
+function childList(array){
+  let list = '';
+  let arrLen = array.length;
+  if (arrLen == 1){
+    list = array[0].name;
+    console.log(list);
+    return list;
+  }
+  if (arrLen == 2){
+    list = `${array[0].name} and ${array[1].name}`;
+    console.log(list);
+    return list;
+  } else if (arrLen > 2){
+    array.map(function(child, i){
+      let index1 = i+1;
+      if (index1<arrLen){
+        list = list+`${child.name}, `
+      } if (index1==arrLen){
+        list = list.slice(0, -2);
+        list = list+` and ${child.name}`
+      }
+    });
+    console.log(list);
+    return list
+  }
+
+}
+
 export default {
-  childParagraph,
+  childList,
+  children,
   relationshipStatus,
   health,
-  livingArrangementsParagraph
+  livingArrangements,
+  courtOrders
 }
