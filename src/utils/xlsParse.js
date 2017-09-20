@@ -28,15 +28,46 @@ case: {
   child_info: parseChildren(),
   court_orders: getCellValue('B15', 4),
   court_order_info: getCellValue('B16', 4),
+  commenced_divorce: getCellValue('B17', 4),
   case_finance: {
     family_home_total: Math.round(getCellValue('I19', 0)),
     family_home_address: getCellValue('D6', 4),
     child_support_amount: getCellValue('D7', 4),
     child_support_recipient: getCellValue('D8', 4),
     spousal_support_amount: getCellValue('D9', 4),
-    spousal_support_recipient: getCellValue('D10', 4)
-  }
-},
+    spousal_support_recipient: getCellValue('D10', 4),
+    partner_a: {
+      family_home: Math.round(getCellValue('K130', 0)),
+      other_property: Math.round(getCellValue('K131', 0)),
+      personal_assets: Math.round(getCellValue('K132', 0)),
+      liabilities: Math.round(getCellValue('K133', 0)),
+      business_assets: Math.round(getCellValue('K134', 0)),
+      other_assets: Math.round(getCellValue('K135', 0)),
+      total_net: Math.round(getCellValue('K137', 0)),
+      total_gross: Math.round(getCellValue('K136', 0)),
+      split: getCellValue('J137', 0),
+      pensions: {
+      total: Math.round(getCellValue('K138', 0)),
+      split: getCellValue('J138', 0)
+    }
+  },
+    partner_b: {
+      family_home: Math.round(getCellValue('M130', 0)),
+      other_property: Math.round(getCellValue('M131', 0)),
+      personal_assets: Math.round(getCellValue('M132', 0)),
+      liabilities: Math.round(getCellValue('M133', 0)),
+      business_assets: Math.round(getCellValue('M134', 0)),
+      other_assets: Math.round(getCellValue('M135', 0)),
+      total_net: Math.round(getCellValue('M137', 0)),
+      total_gross: Math.round(getCellValue('M136', 0)),
+      split: getCellValue('L137', 0),
+      pensions: {
+        total: Math.round(getCellValue('M138', 0)),
+        split: getCellValue('L138', 0)
+      }
+    }
+    }
+  },
     partner_a: {
           title: getCellValue('B22', 4),
           first_name: getCellValue('B23', 4),
@@ -52,22 +83,14 @@ case: {
           ill_health_description: getCellValue('B32', 4),
                       address: getCellValue('B34', 4),
           personal_finance: {
-            monthly_outgoings: getCellValue('F47', 1),
-            net_monthly_income: getCellValue('G34', 1),
-            family_home: Math.round(getCellValue('K130', 0)),
-            other_property: Math.round(getCellValue('K131', 0)),
-            personal_assets: Math.round(getCellValue('K132', 0)),
-            liabilities: Math.round(getCellValue('K133', 0)),
-            business_assets: Math.round(getCellValue('K134', 0)),
-            other_assets: Math.round(getCellValue('K135', 0)),
-            total_net: Math.round(getCellValue('K137', 0)),
-            total_gross: Math.round(getCellValue('K136', 0)),
-            split: getCellValue('J137', 0),
-            pensions: {
-            total: Math.round(getCellValue('K138', 0)),
-            split: getCellValue('J138', 0),
-            net_monthly_income: getCellValue('F34', 0)
-            }
+            income: {
+              employment_income_net: getCellValue('F15', 1),
+              state_benefits: getCellValue('F30', 1),
+              other_income: getCellValue('F35', 1)
+            },
+            monthly_outgoings: getCellValue('F34', 3),
+            net_monthly_income: getCellValue('F34', 1),
+            pension: getCellValue('G99', 0)
           }
     },
     partner_b: {
@@ -85,20 +108,25 @@ case: {
           ill_health_description: getCellValue('E32', 4),
           address: getCellValue('E34', 4),
           personal_finance: {
-            family_home: Math.round(getCellValue('M130', 0)),
-            other_property: Math.round(getCellValue('M131', 0)),
-            personal_assets: Math.round(getCellValue('M132', 0)),
-            liabilities: Math.round(getCellValue('M133', 0)),
-            business_assets: Math.round(getCellValue('M134', 0)),
-            other_assets: Math.round(getCellValue('M135', 0)),
-            total_net: Math.round(getCellValue('M137', 0)),
-            total_gross: Math.round(getCellValue('M136', 0)),
-            split: getCellValue('L137', 0),
-            net_monthly_income: getCellValue('F34', 1),
-            pensions: {
-              total: Math.round(getCellValue('M138', 0)),
-              split: getCellValue('L138', 0)
+            income: {
+              employment_income_net: getCellValue('G15', 1),
+              state_benefits: getCellValue('G30', 1),
+              other_income: getCellValue('G35', 1)
+            },
+            expenditure: {
+              accomodation:
+              utilities:
+              financial_commitments:
+              transport:
+              household_expenses:
+              personal_expenses:
+              recreation:
+              children:
             }
+            shortfall_surplus:
+            monthly_outgoings: getCellValue('G34', 3),
+            net_monthly_income: getCellValue('G34', 1),
+            pension: getCellValue('H99', 0)
           }
     }
   }
@@ -170,7 +198,10 @@ case: {
     if (desired_value == undefined){
       output_value = undefined;
     }
-    if (_.isString(desired_value)){
+    if ((desired_value == 'partner_a') || (desired_value == 'partner_b')){
+      output_value = desired_value;
+    }
+    if (_.isString(desired_value) && (desired_value != 'partner_a')&&(desired_value != 'partner_b')){
       output_value = dT.capitalise(desired_value);
     }
     if (_.isNumber(desired_value) && (!dateFormat)){

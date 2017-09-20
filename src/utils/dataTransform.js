@@ -142,7 +142,6 @@ function mmyy(momentDate){
 };
 
 function ageFromDoB(dateString){
-  console.log(dateString);
   return moment().diff(dateString, 'years');
 };
 
@@ -150,13 +149,73 @@ function numberWithCommas(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-// function partnerName(data, boolean){
-//   if (data.case.case_finance.child_support_recipient = 'Partner A'){
-//     return
-//   }
-//   if (boolean == false)
-//   return
-// }
+function payeeGender(partner, data){
+  let partnerSelect;
+  if (partner == 'partner_a'){
+    partnerSelect = data.partner_b;
+  }
+  if (partner == 'partner_b'){
+    partnerSelect = data.partner_a;
+  }
+  let pronoun = toPronoun(partnerSelect.title);
+  return pronoun;
+};
+
+function supportCalc(data, io, rp){
+  let figure;
+  if ((io == 'i')&&(rp == 'r')){
+    let recipient = data.case.case_finance.child_support_recipient;
+    figure = data[`${recipient}`].personal_finance.net_monthly_income;
+    return numberWithCommas(figure);
+  }
+  if ((io == 'o')&&(rp == 'r')){
+    let recipient = data.case.case_finance.child_support_recipient;
+    figure = data[`${recipient}`].personal_finance.monthly_outgoings;
+    console.log(figure);
+    return numberWithCommas(figure);
+  }
+  if ((io == 'i')&&(rp == 'p')){
+    let recipient = data.case.case_finance.child_support_recipient;
+    if (recipient == 'partner_a'){
+      figure = data.partner_b.personal_finance.net_monthly_income;
+    } else if (recipient == 'partner_b') {
+      figure = data.partner_a.personal_finance.net_monthly_income;
+    }
+    return numberWithCommas(figure);
+  }
+  if ((io == 'o')&&(rp == 'p')){
+    let recipient = data.case.case_finance.child_support_recipient;
+    if (recipient == 'partner_a'){
+      figure = data.partner_b.personal_finance.monthly_outgoings;
+    } else if (recipient == 'partner_b') {
+      figure = data.partner_a.personal_finance.monthly_outgoings;
+    }
+    return numberWithCommas(figure);
+  }
+};
+
+
+function partnerName(partner, data, boolean){
+  if ((partner == 'partner_a')&&(boolean == false)){
+    name = data.partner_b.first_name;
+    console.log(name);
+    return name;
+  }
+  if ((partner == 'partner_b')&&(boolean == false)){
+    name = data.partner_a.first_name;
+        console.log(name);
+    return name;
+  }
+  if (partner == 'partner_a'){
+    name = data.partner_a.first_name;
+    return name;
+  }
+  if (partner == 'partner_b'){
+    name = data.partner_b.first_name;
+        console.log(name);
+    return name;
+  }
+};
 
 export default {
   fileName,
@@ -167,5 +226,7 @@ export default {
   ageFromDoB,
   childCheck,
   numberWithCommas,
-  partnerName
+  partnerName,
+  payeeGender,
+  supportCalc
 }

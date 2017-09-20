@@ -1,8 +1,20 @@
 import ntow from 'number-to-words';
 import dT from './dataTransform'
 
+
+function pensions(data, partner){
+  let partnerData = data[`${partner}`];
+  let para = '';
+  if (partnerData.personal_finance.pension){
+    para = `${partnerData.first_name} has ………… pension with a total Cash Equivalent Transfer Value of £${partnerData.personal_finance.pension}.`
+  } else {
+    para = '';
+  }
+    return para;
+};
+
 function favouredPartner(data){
-  let split = data.partner_a.finance.split;
+  let split = data.case.case_finance.partner_a.split;
   let partner_a = data.partner_a.first_name;
   let partner_b = data.partner_b.first_name;
   let paragraph = '';
@@ -213,5 +225,6 @@ export default {
   livingArrangements,
   courtOrders,
   legalAdvice,
-  favouredPartner
+  favouredPartner,
+  pensions
 }
