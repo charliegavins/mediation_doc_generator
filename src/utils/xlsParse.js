@@ -28,6 +28,14 @@ case: {
   child_info: parseChildren(),
   court_orders: getCellValue('B15', 4),
   court_order_info: getCellValue('B16', 4),
+  case_finance: {
+    family_home_total: Math.round(getCellValue('I19', 0)),
+    family_home_address: getCellValue('D6', 4),
+    child_support_amount: getCellValue('D7', 4),
+    child_support_recipient: getCellValue('D8', 4),
+    spousal_support_amount: getCellValue('D9', 4),
+    spousal_support_recipient: getCellValue('D10', 4)
+  }
 },
     partner_a: {
           title: getCellValue('B22', 4),
@@ -42,14 +50,25 @@ case: {
           new_partner_remarriage_intended: getCellValue('B30', 4),
           good_health: getCellValue('B31', 4),
           ill_health_description: getCellValue('B32', 4),
-          address: getCellValue('B34', 4),
-          family_home: getCellValue('K130', 0),
-          other_property: getCellValue('K131', 0),
-          personal_assets: getCellValue('K132', 0),
-          liabilities: getCellValue('K133', 0),
-          business_assets: getCellValue('K134', 0),
-          other_assets: getCellValue('K135', 0),
-          pensions: getCellValue('K137', 0),
+                      address: getCellValue('B34', 4),
+          personal_finance: {
+            monthly_outgoings: getCellValue('F47', 1),
+            net_monthly_income: getCellValue('G34', 1),
+            family_home: Math.round(getCellValue('K130', 0)),
+            other_property: Math.round(getCellValue('K131', 0)),
+            personal_assets: Math.round(getCellValue('K132', 0)),
+            liabilities: Math.round(getCellValue('K133', 0)),
+            business_assets: Math.round(getCellValue('K134', 0)),
+            other_assets: Math.round(getCellValue('K135', 0)),
+            total_net: Math.round(getCellValue('K137', 0)),
+            total_gross: Math.round(getCellValue('K136', 0)),
+            split: getCellValue('J137', 0),
+            pensions: {
+            total: Math.round(getCellValue('K138', 0)),
+            split: getCellValue('J138', 0),
+            net_monthly_income: getCellValue('F34', 0)
+            }
+          }
     },
     partner_b: {
           title: getCellValue('E22', 4),
@@ -65,13 +84,22 @@ case: {
           good_health: getCellValue('E31', 4),
           ill_health_description: getCellValue('E32', 4),
           address: getCellValue('E34', 4),
-          family_home: getCellValue('M130', 0),
-          other_property: getCellValue('M131', 0),
-          personal_assets: getCellValue('M132', 0),
-          liabilities: getCellValue('M133', 0),
-          business_assets: getCellValue('M134', 0),
-          other_assets: getCellValue('M135', 0),
-          pensions: getCellValue('M137', 0),
+          personal_finance: {
+            family_home: Math.round(getCellValue('M130', 0)),
+            other_property: Math.round(getCellValue('M131', 0)),
+            personal_assets: Math.round(getCellValue('M132', 0)),
+            liabilities: Math.round(getCellValue('M133', 0)),
+            business_assets: Math.round(getCellValue('M134', 0)),
+            other_assets: Math.round(getCellValue('M135', 0)),
+            total_net: Math.round(getCellValue('M137', 0)),
+            total_gross: Math.round(getCellValue('M136', 0)),
+            split: getCellValue('L137', 0),
+            net_monthly_income: getCellValue('F34', 1),
+            pensions: {
+              total: Math.round(getCellValue('M138', 0)),
+              split: getCellValue('L138', 0)
+            }
+          }
     }
   }
 
@@ -80,41 +108,47 @@ case: {
           {
             name: getCellValue('B37', 4),
             dob: getCellValue('B40', 4, 'Do MMMM YYYY'),
-            age: getCellValue('B40', 4, 'age')
+            age: getCellValue('B40', 4, 'age'),
+            gender: getCellValue('B46', 4, 'age')
           },
           {
             name: getCellValue('B49', 4),
             dob: getCellValue('B52', 4, 'Do MMMM YYYY'),
-            age: getCellValue('B52', 4, 'age')
+            age: getCellValue('B52', 4, 'age'),
+            gender: getCellValue('B58', 4, 'age')
           },
           {
             name: getCellValue('B61', 4),
             dob: getCellValue('B64', 4, 'Do MMMM YYYY'),
-            age: getCellValue('B64', 4, 'age')
+            age: getCellValue('B64', 4, 'age'),
+            gender: getCellValue('B70', 4, 'age')
           },
           {
             name: getCellValue('B73', 4),
             dob: getCellValue('B76', 4, 'Do MMMM YYYY'),
-            age: getCellValue('B76', 4, 'age')
+            age: getCellValue('B76', 4, 'age'),
+            gender: getCellValue('B82', 4, 'age')
           },
           {
           name: getCellValue('B85', 4),
           dob: getCellValue('B88', 4, 'Do MMMM YYYY'),
-          age: getCellValue('B88', 4, 'age')
+          age: getCellValue('B88', 4, 'age'),
+          gender: getCellValue('B94', 4, 'age')
         },
           {
           name: getCellValue('B97', 4),
           dob: getCellValue('B100', 4, 'Do MMMM YYYY'),
-          age: getCellValue('B100', 4, 'age')
+          age: getCellValue('B100', 4, 'age'),
+          gender: getCellValue('B106', 4, 'age')
         },
           {
           name: getCellValue('B109', 4),
           dob: getCellValue('B112', 4, 'Do MMMM YYYY'),
-          age: getCellValue('B112', 4, 'age')
+          age: getCellValue('B112', 4, 'age'),
+          gender: getCellValue('B118', 4, 'age')
         }
       ];
       for (let i=child_info.length-1;i>=0;i--){
-        console.log(i);
         if ((child_info[i].name == undefined) || (child_info[i].dob == undefined)){
           child_info.splice(i, 1);
         }

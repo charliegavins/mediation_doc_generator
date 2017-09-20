@@ -10,6 +10,7 @@ import dT from './dataTransform';
 import tG from './textGenerator';
 
 export default function docxGen(data, template){
+  console.log(data);
       var zip = new JSZip(template);
       var doc= new Docxtemplater().loadZip(zip)
       doc.setData({
@@ -47,22 +48,31 @@ export default function docxGen(data, template){
         good_health_b: data.partner_b.good_health,
         ill_health_description_a: data.partner_a.ill_health_description,
         ill_health_description_b: data.partner_b.ill_health_description,
-        family_home_a: data.partner_a.family_home,
-        family_home_b: data.partner_b.family_home,
-        other_property_a: data.partner_a.other_property,
-        other_property_b: data.partner_b.other_property,
-        personal_assets_a: data.partner_a.personal_assets,
-        personal_assets_b: data.partner_b.personal_assets,
-        liabilities_a: data.partner_a.liabilities,
-        liabilities_b: data.partner_b.liabilities,
-        business_assets_a: data.partner_a.business_assets,
-        business_assets_b: data.partner_b.business_assets,
-        other_assets_a: data.partner_a.other_assets,
-        other_assets_b: data.partner_b.other_assets,
-        pensions_a: data.partner_a.pensions,
-        pensions_b: data.partner_b.pensions,
+        family_home_a: dT.numberWithCommas(data.partner_a.finance.family_home),
+        family_home_b: dT.numberWithCommas(data.partner_b.finance.family_home),
+        other_property_a: dT.numberWithCommas(data.partner_a.finance.other_property),
+        other_property_b: dT.numberWithCommas(data.partner_b.finance.other_property),
+        personal_assets_a: dT.numberWithCommas(data.partner_a.finance.personal_assets),
+        personal_assets_b: dT.numberWithCommas(data.partner_b.finance.personal_assets),
+        liabilities_a: dT.numberWithCommas(data.partner_a.finance.liabilities),
+        liabilities_b: dT.numberWithCommas(data.partner_b.finance.liabilities),
+        business_assets_a: dT.numberWithCommas(data.partner_a.finance.business_assets),
+        business_assets_b: dT.numberWithCommas(data.partner_b.finance.business_assets),
+        other_assets_a: dT.numberWithCommas(data.partner_a.finance.other_assets),
+        other_assets_b: dT.numberWithCommas(data.partner_b.finance.other_assets),
+        pensions_a: dT.numberWithCommas(data.partner_a.finance.pensions.total),
+        pensions_b: dT.numberWithCommas(data.partner_b.finance.pensions.total),
+        total_finance_a: dT.numberWithCommas(data.partner_a.finance.total_net),
+        total_finance_b: dT.numberWithCommas(data.partner_b.finance.total_net),
+        sub_total_assets_a: dT.numberWithCommas(data.partner_a.finance.total_gross),
+        sub_total_assets_b: dT.numberWithCommas(data.partner_b.finance.total_gross),
+        asset_split_a: data.partner_a.finance.split*100,
+        asset_split_b: data.partner_b.finance.split*100,
+        pensions_split_a: data.partner_a.finance.pensions.split*100,
+        pensions_split_b: data.partner_b.finance.pensions.split*100,
         footer_date: data.doc.footer_date,
         footer_info: dT.footerInfo(data),
+        favoured_partner: tG.favouredPartner(data),
         child_paragraph: tG.children(data.case.child_info),
         health_a: tG.health(data, 'a'),
         health_b: tG.health(data, 'b'),
@@ -70,7 +80,20 @@ export default function docxGen(data, template){
         relationship_status_b: tG.relationshipStatus(data.partner_b),
         living_arrangements_paragraph: tG.livingArrangements(data),
         court_orders_paragraph: tG.courtOrders(data.case),
-        child_list: tG.childList(data.case.child_info)
+        child_list: tG.childList(data.case.child_info),
+        legal_advice_para: tG.legalAdvice(data.case.legal_advice),
+        family_home_total: data.case.family_home_total,
+        family_home_address: data.case.family_home_address,
+        net_monthly_income_a: data.partner_a.finance.net_monthly_income,
+        net_monthly_income_b: data.partner_b.finance.net_monthly_income,
+        monthly_outgoings_a: data.partner_a.finance.monthly_outgoings,
+        monthly_outgoings_b: data.partner_b.finance.monthly_outgoings
+    //     child_support_amount: data.case.case_finance.child_support_amount,
+    // child_support_recipient: dT.partnerName(data),
+    // child_support_payee: dT.partnerName(data, false),
+    // spousal_support_amount: data.case.case_finance.spousal_support_amount,
+    // // spousal_support_recipient: dT.partnerName(data),
+    // // spousal_support_payee: dT.partnerName(data, false)
       });
 
       try {
@@ -93,6 +116,6 @@ export default function docxGen(data, template){
           type:"blob",
           mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       }) //Output the document using Data-URI
-      console.log(doc);
+      // console.log(doc);
       saveAs(out,dT.fileName(data));
   };

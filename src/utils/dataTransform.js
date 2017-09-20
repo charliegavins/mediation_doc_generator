@@ -1,24 +1,37 @@
 import moment from 'moment';
 import XLSX from 'xlsx';
+import _ from 'lodash';
 
 //this takes the title from the database and assigns a gender for the paragraph generation
-function titleToPronoun(title, type){
-  if ((title == 'Mr') && (type != 'posses')){
+function toPronoun(input, type){
+  if ((input == 'MALE') && (type != 'posses')){
     return 'he'
   }
-  if ((title == 'Mrs') && (type != 'posses')){
+  if ((input == 'FEMALE') && (type != 'posses')){
     return 'she'
   }
-  if ((title == 'Ms') && (type != 'posses')){
-    return 'she'
-  }
-  if ((title == 'Mr') && (type == 'posses')){
+  if ((input == 'MALE') && (type == 'posses')){
     return 'his'
   }
-  if ((title == 'Mrs') && (type == 'posses')){
+  if ((input == 'FEMALE') && (type == 'posses')){
     return 'her'
   }
-  if ((title == 'Ms') && (type == 'posses')){
+  if ((input == 'Mr') && (type != 'posses')){
+    return 'he'
+  }
+  if ((input == 'Mrs') && (type != 'posses')){
+    return 'she'
+  }
+  if ((input == 'Ms') && (type != 'posses')){
+    return 'she'
+  }
+  if ((input == 'Mr') && (type == 'posses')){
+    return 'his'
+  }
+  if ((input == 'Mrs') && (type == 'posses')){
+    return 'her'
+  }
+  if ((input == 'Ms') && (type == 'posses')){
     return 'her'
   }
 }
@@ -133,12 +146,26 @@ function ageFromDoB(dateString){
   return moment().diff(dateString, 'years');
 };
 
+function numberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+// function partnerName(data, boolean){
+//   if (data.case.case_finance.child_support_recipient = 'Partner A'){
+//     return
+//   }
+//   if (boolean == false)
+//   return
+// }
+
 export default {
   fileName,
   footerInfo,
-  titleToPronoun,
+  toPronoun,
   capitalise,
   parseDate,
   ageFromDoB,
-  childCheck
+  childCheck,
+  numberWithCommas,
+  partnerName
 }
