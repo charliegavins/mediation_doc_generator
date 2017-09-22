@@ -11,119 +11,138 @@ export default function xlsParse(fileBinary){
   const worksheet = workbook.Sheets[first_sheet_name];
   const MoUInput = {
     doc:{
-        footer_date: (getCellValue('B8', 4, 'DD-MM-YY')),
+        footer_date: (getCellValue('D5', 6, 'DD-MM-YY')),
+    },
+    mediator:{
+      mediator_first_name: getCellValue('B2', 6),
+      mediator_last_name: getCellValue('B3', 6),
+      mediator_practice: getCellValue('B4', 6),
     },
 case: {
-  case_number: getCellValue('B13', 4),
-  mediator_first_name: getCellValue('B2', 5),
-  mediator_last_name: getCellValue('B3', 5),
-  number_of_sessions: dT.capitalise(ntow.toWords(getCellValue('B6', 4))),
-  date_of_mediation_start: (getCellValue('B7', 4, 'Do MMMM YYYY')),
-  date_of_mediation_end: (getCellValue('B8', 4, 'Do MMMM YYYY')),
-  legal_advice: getCellValue('B9', 4),
-  date_married: getCellValue('B10', 4, 'Do MMMM YYYY'),
-  date_cohabited: getCellValue('B11', 4, 'MMMM YYYY'),
-  date_separated: getCellValue('B12', 4, 'MMMM YYYY'),
-  cohabiting: getCellValue('B14', 4),
+  case_number: getCellValue('D2', 6),
+  number_of_sessions: dT.capitalise(ntow.toWords(getCellValue('D3', 6))),
+  date_of_mediation_start: (getCellValue('D4', 6, 'Do MMMM YYYY')),
+  date_of_mediation_end: (getCellValue('D5', 6, 'Do MMMM YYYY')),
+  legal_advice: getCellValue('D6', 6),
+  date_married: getCellValue('D7', 6, 'Do MMMM YYYY'),
+  date_cohabited: getCellValue('D8', 6, 'MMMM YYYY'),
+  date_separated: getCellValue('D9', 6, 'MMMM YYYY'),
+  cohabiting: getCellValue('D10', 6),
+  court_orders: getCellValue('D11', 6),
+  court_order_info: getCellValue('D12', 6),
+  commenced_divorce: getCellValue('D13', 6),
+  court_fees_split: getCellValue('D14', 6),
+  family_home_address: getCellValue('F2', 6),
   child_info: parseChildren(),
-  court_orders: getCellValue('B15', 4),
-  court_order_info: getCellValue('B16', 4),
-  commenced_divorce: getCellValue('B17', 4),
   case_finance: {
-    family_home_total: Math.round(getCellValue('I19', 0)),
-    family_home_address: getCellValue('D6', 4),
-    child_support_amount: getCellValue('D7', 4),
-    child_support_recipient: getCellValue('D8', 4),
-    spousal_support_amount: getCellValue('D9', 4),
-    spousal_support_recipient: getCellValue('D10', 4),
+    family_home_total: Math.round(getCellValue('F2', 0)),
+    child_support_amount: getCellValue('F3', 6),
+    child_support_recipient: getCellValue('F4', 6),
+    spousal_support_amount: getCellValue('F5', 6),
+    spousal_support_recipient: getCellValue('F6', 6),
     partner_a: {
-      family_home: Math.round(getCellValue('K130', 0)),
-      other_property: Math.round(getCellValue('K131', 0)),
-      personal_assets: Math.round(getCellValue('K132', 0)),
-      liabilities: Math.round(getCellValue('K133', 0)),
-      business_assets: Math.round(getCellValue('K134', 0)),
-      other_assets: Math.round(getCellValue('K135', 0)),
-      total_net: Math.round(getCellValue('K137', 0)),
-      total_gross: Math.round(getCellValue('K136', 0)),
-      split: getCellValue('J137', 0),
+      family_home: Math.round(getCellValue('F13', 0)),
+      other_property: Math.round(getCellValue('F14', 0)),
+      personal_assets: Math.round(getCellValue('F15', 0)),
+      liabilities: Math.round(getCellValue('F16', 0)),
+      business_assets: Math.round(getCellValue('F17', 0)),
+      other_assets: Math.round(getCellValue('F18', 0)),
+      total_net: Math.round(getCellValue('F19', 0)),
+      total_gross: Math.round(getCellValue('F20', 0)),
+      total_split: getCellValue('F21', 0),
       pensions: {
-      total: Math.round(getCellValue('K138', 0)),
-      split: getCellValue('J138', 0)
+      total: Math.round(getCellValue('F23', 0)),
+      split: getCellValue('F24', 0)
     }
   },
     partner_b: {
-      family_home: Math.round(getCellValue('M130', 0)),
-      other_property: Math.round(getCellValue('M131', 0)),
-      personal_assets: Math.round(getCellValue('M132', 0)),
-      liabilities: Math.round(getCellValue('M133', 0)),
-      business_assets: Math.round(getCellValue('M134', 0)),
-      other_assets: Math.round(getCellValue('M135', 0)),
-      total_net: Math.round(getCellValue('M137', 0)),
-      total_gross: Math.round(getCellValue('M136', 0)),
-      split: getCellValue('L137', 0),
+      family_home: Math.round(getCellValue('F28', 0)),
+      other_property: Math.round(getCellValue('F29', 0)),
+      personal_assets: Math.round(getCellValue('F30', 0)),
+      liabilities: Math.round(getCellValue('F31', 0)),
+      business_assets: Math.round(getCellValue('F32', 0)),
+      other_assets: Math.round(getCellValue('F33', 0)),
+      total_net: Math.round(getCellValue('F34', 0)),
+      total_gross: Math.round(getCellValue('F35', 0)),
+      split: getCellValue('F36', 0),
       pensions: {
-        total: Math.round(getCellValue('M138', 0)),
-        split: getCellValue('L138', 0)
+        total: Math.round(getCellValue('F37', 0)),
+        split: getCellValue('F38', 0)
       }
     }
     }
   },
     partner_a: {
-          title: getCellValue('B22', 4),
-          first_name: getCellValue('B23', 4),
-          last_name: getCellValue('B24', 4),
-          dob: getCellValue('B25', 4, 'do MMMM YYYY'),
-          age: getCellValue('B25', 4, 'age'),
-          occupation: getCellValue('B26', 4),
-          new_partner: getCellValue('B27', 4),
-          new_partner_cohabiting: getCellValue('B28', 4),
-          new_partner_remarried: getCellValue('B29', 4),
-          new_partner_remarriage_intended: getCellValue('B30', 4),
-          good_health: getCellValue('B31', 4),
-          ill_health_description: getCellValue('B32', 4),
-                      address: getCellValue('B34', 4),
+          title: getCellValue('J2', 4),
+          first_name: getCellValue('J3', 4),
+          last_name: getCellValue('J4', 4),
+          dob: getCellValue('J5', 4, 'do MMMM YYYY'),
+          age: getCellValue('J5', 4, 'age'),
+          occupation: getCellValue('J6', 4),
+          new_partner: getCellValue('J7', 4),
+          new_partner_cohabiting: getCellValue('J8', 4),
+          new_partner_remarried: getCellValue('J9', 4),
+          new_partner_remarriage_intended: getCellValue('J10', 4),
+          good_health: getCellValue('J11', 4),
+          ill_health_description: getCellValue('J12', 4),
+                      address: getCellValue('J13', 4),
           personal_finance: {
             income: {
-              employment_income_net: getCellValue('F15', 1),
-              state_benefits: getCellValue('F30', 1),
-              other_income: getCellValue('F35', 1)
+              employment_income_net: getCellValue('J26', 1),
+              self_employment_income_net: getCellValue('J27', 1),
+              income_investments_rental: getCellValue('J28', 1),
+              state_benefits: getCellValue('J29', 1),
+              other_income: getCellValue('J30', 1)
             },
-            monthly_outgoings: getCellValue('F34', 3),
-            net_monthly_income: getCellValue('F34', 1),
-            pension: getCellValue('G99', 0)
+            expenditure: {
+              accomodation: getCellValue('J32', 1),
+              utilities: getCellValue('J33', 1),
+              financial_commitments: getCellValue('J34', 1),
+              transport: getCellValue('J35', 1),
+              household_expenses: getCellValue('J36', 1),
+              personal_expenses: getCellValue('J37', 1),
+              recreation: getCellValue('J38', 1),
+              children: getCellValue('J39', 1)
+            },
+            shortfall_surplus: getCellValue('J42', 1)
+            monthly_outgoings: getCellValue('J43', 3),
+            net_monthly_income: getCellValue('J44', 1),
+            pension: getCellValue('J45', 0)
           }
     },
     partner_b: {
-          title: getCellValue('E22', 4),
-          first_name: getCellValue('E23', 4),
-          last_name: getCellValue('E24', 4),
-          dob: getCellValue('E25', 4, 'do MMMM YYYY'),
-          age: getCellValue('E25', 4, 'age'),
-          occupation: getCellValue('E26', 4),
-          new_partner: getCellValue('E27', 4),
-          new_partner_cohabiting: getCellValue('E28', 4),
-          new_partner_remarried: getCellValue('E29', 4),
-          new_partner_remarriage_intended: getCellValue('E30', 4),
-          good_health: getCellValue('E31', 4),
-          ill_health_description: getCellValue('E32', 4),
-          address: getCellValue('E34', 4),
+          title: getCellValue('L2', 4),
+          first_name: getCellValue('L3', 4),
+          last_name: getCellValue('L4', 4),
+          dob: getCellValue('L5', 4, 'do MMMM YYYY'),
+          age: getCellValue('L5', 4, 'age'),
+          occupation: getCellValue('L6', 4),
+          new_partner: getCellValue('L7', 4),
+          new_partner_cohabiting: getCellValue('L8', 4),
+          new_partner_remarried: getCellValue('L9', 4),
+          new_partner_remarriage_intended: getCellValue('L10', 4),
+          good_health: getCellValue('L11', 4),
+          ill_health_description: getCellValue('L12', 4),
+          address: getCellValue('L13', 4),
           personal_finance: {
             income: {
-              employment_income_net: getCellValue('G15', 1),
-              state_benefits: getCellValue('G30', 1),
-              other_income: getCellValue('G35', 1)
+              employment_income_net: getCellValue('L26', 1),
+              self_employment_income_net: getCellValue('L27', 1),
+              income_investments_rental: getCellValue('L28', 1),
+              state_benefits: getCellValue('L29', 1),
+              other_income: getCellValue('L30', 1)
             },
             expenditure: {
-              accomodation:
-              utilities:
-              financial_commitments:
-              transport:
-              household_expenses:
-              personal_expenses:
-              recreation:
-              children:
-            }
-            shortfall_surplus:
+              accomodation: getCellValue('L32', 1),
+              utilities: getCellValue('L33', 1),
+              financial_commitments: getCellValue('J34', 1),
+              transport: getCellValue('L35', 1),
+              household_expenses: getCellValue('L36', 1),
+              personal_expenses: getCellValue('L37', 1),
+              recreation: getCellValue('L38', 1),
+              children: getCellValue('L39', 1)
+            },
+            shortfall_surplus: getCellValue('L42', 1)
             monthly_outgoings: getCellValue('G34', 3),
             net_monthly_income: getCellValue('G34', 1),
             pension: getCellValue('H99', 0)
@@ -134,47 +153,47 @@ case: {
   function parseChildren(){
         let child_info = [
           {
-            name: getCellValue('B37', 4),
-            dob: getCellValue('B40', 4, 'Do MMMM YYYY'),
-            age: getCellValue('B40', 4, 'age'),
-            gender: getCellValue('B46', 4, 'age')
+            name: getCellValue('P2', 4),
+            dob: getCellValue('P5', 4, 'Do MMMM YYYY'),
+            age: getCellValue('P5', 4, 'age'),
+            gender: getCellValue('P11', 4, 'age')
           },
           {
-            name: getCellValue('B49', 4),
-            dob: getCellValue('B52', 4, 'Do MMMM YYYY'),
-            age: getCellValue('B52', 4, 'age'),
-            gender: getCellValue('B58', 4, 'age')
+            name: getCellValue('R2', 4),
+            dob: getCellValue('R5', 4, 'Do MMMM YYYY'),
+            age: getCellValue('R5', 4, 'age'),
+            gender: getCellValue('R11', 4, 'age')
           },
           {
-            name: getCellValue('B61', 4),
-            dob: getCellValue('B64', 4, 'Do MMMM YYYY'),
-            age: getCellValue('B64', 4, 'age'),
-            gender: getCellValue('B70', 4, 'age')
+            name: getCellValue('T2', 4),
+            dob: getCellValue('T5', 4, 'Do MMMM YYYY'),
+            age: getCellValue('T5', 4, 'age'),
+            gender: getCellValue('T11', 4, 'age')
           },
           {
-            name: getCellValue('B73', 4),
-            dob: getCellValue('B76', 4, 'Do MMMM YYYY'),
-            age: getCellValue('B76', 4, 'age'),
-            gender: getCellValue('B82', 4, 'age')
+            name: getCellValue('V2', 4),
+            dob: getCellValue('V5', 4, 'Do MMMM YYYY'),
+            age: getCellValue('V5', 4, 'age'),
+            gender: getCellValue('V11', 4, 'age')
           },
           {
-          name: getCellValue('B85', 4),
-          dob: getCellValue('B88', 4, 'Do MMMM YYYY'),
-          age: getCellValue('B88', 4, 'age'),
-          gender: getCellValue('B94', 4, 'age')
-        },
+            name: getCellValue('X2', 4),
+            dob: getCellValue('X5', 4, 'Do MMMM YYYY'),
+            age: getCellValue('X5', 4, 'age'),
+            gender: getCellValue('X11', 4, 'age')
+          },
           {
-          name: getCellValue('B97', 4),
-          dob: getCellValue('B100', 4, 'Do MMMM YYYY'),
-          age: getCellValue('B100', 4, 'age'),
-          gender: getCellValue('B106', 4, 'age')
-        },
+            name: getCellValue('Z2', 4),
+            dob: getCellValue('Z5', 4, 'Do MMMM YYYY'),
+            age: getCellValue('Z5', 4, 'age'),
+            gender: getCellValue('Z11', 4, 'age')
+          },
           {
-          name: getCellValue('B109', 4),
-          dob: getCellValue('B112', 4, 'Do MMMM YYYY'),
-          age: getCellValue('B112', 4, 'age'),
-          gender: getCellValue('B118', 4, 'age')
-        }
+            name: getCellValue('AB2', 4),
+            dob: getCellValue('AB5', 4, 'Do MMMM YYYY'),
+            age: getCellValue('AB5', 4, 'age'),
+            gender: getCellValue('AB11', 4, 'age')
+          }
       ];
       for (let i=child_info.length-1;i>=0;i--){
         if ((child_info[i].name == undefined) || (child_info[i].dob == undefined)){
