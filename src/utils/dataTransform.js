@@ -50,9 +50,9 @@ function parseDate(unParsedDate, dateFormat){
 //take excel code and format it to object e.g. { d:25, m:12, y:2017 }
   let semiParsedDate = XLSX.SSF.parse_date_code(unParsedDate);
 //take the object and convert into a string so moment can comprehend e.g. '25-12-2017', ensuring that single digits have a leading zero
-  let semiParsedDateString = `${addZero(semiParsedDate['d'])}-${addZero(semiParsedDate['m'])}-${semiParsedDate['y']}`
+  let semiParsedDateString = `${semiParsedDate['d']}-${semiParsedDate['m']}-${semiParsedDate['y']}`
 //parse date to create a moment object, passing in the format as an argument to 'help' moment calculate
-  let parsedDate = moment(semiParsedDateString, 'DD-MM-YYYY');
+  let parsedDate = moment(semiParsedDateString, 'D-M-YYYY');
   if (dateFormat == 'age'){
     let age = ageParse(parsedDate);
     return age;
@@ -171,7 +171,6 @@ function supportCalc(data, io, rp){
   if ((io == 'o')&&(rp == 'r')){
     let recipient = data.case.case_finance.child_support_recipient;
     figure = data[`${recipient}`].personal_finance.monthly_outgoings;
-    console.log(figure);
     return numberWithCommas(figure);
   }
   if ((io == 'i')&&(rp == 'p')){
@@ -194,16 +193,14 @@ function supportCalc(data, io, rp){
   }
 };
 
-
+//takes the argument 'partner_a' or 'partner_b', alongside the data, and a boolean. If the boolean is false, then function returns the opposite partner. i.e. arg= 'partner_a' whos name = Penny, returns partner_b's name, Andrew
 function partnerName(partner, data, boolean){
   if ((partner == 'partner_a')&&(boolean == false)){
     name = data.partner_b.first_name;
-    console.log(name);
     return name;
   }
   if ((partner == 'partner_b')&&(boolean == false)){
     name = data.partner_a.first_name;
-        console.log(name);
     return name;
   }
   if (partner == 'partner_a'){
@@ -212,7 +209,6 @@ function partnerName(partner, data, boolean){
   }
   if (partner == 'partner_b'){
     name = data.partner_b.first_name;
-        console.log(name);
     return name;
   }
 };

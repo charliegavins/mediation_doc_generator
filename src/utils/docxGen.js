@@ -10,13 +10,13 @@ import dT from './dataTransform';
 import tG from './textGenerator';
 
 export default function docxGen(data, template){
-  console.log(data);
       var zip = new JSZip(template);
       var doc= new Docxtemplater().loadZip(zip)
       doc.setData({
         case_number: data.case.case_number,
-        mediator_first_name: data.case.mediator_first_name,
-        mediator_last_name: data.case.mediator_last_name,
+        mediator_first_name: data.mediator.first_name,
+        mediator_last_name: data.mediator.last_name,
+        mediator_practice: data.mediator.practice,
         number_of_sessions: data.case.number_of_sessions,
         date_of_mediation_start: data.case.date_of_mediation_start,
         date_of_mediation_end: data.case.date_of_mediation_end,
@@ -98,10 +98,16 @@ export default function docxGen(data, template){
         partner_a_pensions_para: tG.pensions(data, 'partner_a'),
         partner_b_pensions_para: tG.pensions(data, 'partner_b'),
         commenced_divorce: dT.partnerName(data),
+        not_commenced_divorce: dT.partnerName(data),
+        //net monthly income for reciever of support
         net_monthly_income_r: dT.supportCalc(data, 'i', 'r'),
+        //net monthly outgoings for reciever of support
         net_monthly_outgoings_r: dT.supportCalc(data, 'o', 'r'),
+        //net monthly income for payer of support
         net_monthly_income_p: dT.supportCalc(data, 'i', 'p'),
+        //net monthly outgoings for payer of support
         net_monthly_outgoings_p: dT.supportCalc(data, 'o', 'p'),
+
       });
 
       try {
@@ -124,6 +130,6 @@ export default function docxGen(data, template){
           type:"blob",
           mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       }) //Output the document using Data-URI
-      // console.log(doc);
+      console.log(doc);
       saveAs(out,dT.fileName(data));
   };
