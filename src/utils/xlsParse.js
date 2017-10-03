@@ -31,8 +31,9 @@ case: {
   court_orders: getCellValue('D11', 7),
   court_order_info: getCellValue('D12', 7),
   commenced_divorce: getCellValue('D13', 7),
-  court_fees_split: getCellValue('D14', 7),
-  family_home_address: getCellValue('F2', 7),
+  court_fees_responsibility: getCellValue('D14', 7),
+  family_home_address: getCellValue('H2', 7),
+  outstanding_mortgage: getCellValue('H4', 7),
   child_info: parseChildren(),
   case_finance: {
     family_home_total: Math.round(getCellValue('F2', 7)),
@@ -92,22 +93,23 @@ case: {
               self_employment_income_net: getCellValue('J27', 7),
               income_investments_rental: getCellValue('J28', 7),
               state_benefits: getCellValue('J29', 7),
-              other_income: getCellValue('J30', 7)
+              other_income: getCellValue('J30', 7),
+              total_income: getCellValue('J31', 7)
             },
             expenditure: {
-              accomodation: getCellValue('J32', 7),
-              utilities: getCellValue('J33', 7),
-              financial_commitments: getCellValue('J34', 7),
-              transport: getCellValue('J35', 7),
-              household_expenses: getCellValue('J36', 7),
-              personal_expenses: getCellValue('J37', 7),
-              recreation: getCellValue('J38', 7),
-              children: getCellValue('J39', 7)
+              accomodation: getCellValue('J33', 7),
+              utilities: getCellValue('J34', 7),
+              financial_commitments: getCellValue('J35', 7),
+              transport: getCellValue('J36', 7),
+              household_expenses: getCellValue('J37', 7),
+              personal_expenses: getCellValue('J38', 7),
+              recreation: getCellValue('J39', 7),
+              children: getCellValue('J50', 7)
             },
-            shortfall_surplus: getCellValue('J42', 7),
-            monthly_outgoings: getCellValue('J43', 7),
-            net_monthly_income: getCellValue('J44', 7),
-            pension: getCellValue('J45', 7)
+            shortfall_surplus: getCellValue('J43', 7),
+            monthly_outgoings: getCellValue('J44', 7),
+            net_monthly_income: getCellValue('J45', 7),
+            pension: getCellValue('J46', 7)
           }
     },
     partner_b: {
@@ -130,22 +132,23 @@ case: {
               self_employment_income_net: getCellValue('L27', 7),
               income_investments_rental: getCellValue('L28', 7),
               state_benefits: getCellValue('L29', 7),
-              other_income: getCellValue('L30', 7)
+              other_income: getCellValue('L30', 7),
+              total_income: getCellValue('L31', 7)
             },
             expenditure: {
-              accomodation: getCellValue('L32', 7),
-              utilities: getCellValue('L33', 7),
-              financial_commitments: getCellValue('J34', 7),
-              transport: getCellValue('L35', 7),
-              household_expenses: getCellValue('L36', 7),
-              personal_expenses: getCellValue('L37', 7),
-              recreation: getCellValue('L38', 7),
-              children: getCellValue('L39', 7)
+              accomodation: getCellValue('L33', 7),
+              utilities: getCellValue('L34', 7),
+              financial_commitments: getCellValue('L35', 7),
+              transport: getCellValue('L36', 7),
+              household_expenses: getCellValue('L37', 7),
+              personal_expenses: getCellValue('L38', 7),
+              recreation: getCellValue('L39', 7),
+              children: getCellValue('L50', 7)
             },
-            shortfall_surplus: getCellValue('L42', 7),
-            monthly_outgoings: getCellValue('L43', 7),
-            net_monthly_income: getCellValue('L44', 7),
-            pension: getCellValue('L45', 7)
+            shortfall_surplus: getCellValue('L43', 7),
+            monthly_outgoings: getCellValue('L44', 7),
+            net_monthly_income: getCellValue('L45', 7),
+            pension: getCellValue('L46', 7)
           }
     }
   }

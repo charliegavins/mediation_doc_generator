@@ -2,6 +2,28 @@ import ntow from 'number-to-words';
 import dT from './dataTransform'
 
 
+function support(data, partner){
+  let para = '';
+  let csa = dT.numberWithCommas(data.case.case_finance.child_support_amount);
+  let csr = data.case.case_finance.child_support_recipient;
+  let ssa = dT.numberWithCommas(data.case.case_finance.spousal_support_amount);
+  let ssr = data.case.case_finance.spousal_support_recipient;
+  let pronoun = dT.payeeGender(partner, data, true);
+  if ((ssr == partner)&&(csr == partner)){
+    para = ``;
+  }
+  if ((ssr == partner)&&(csr != partner)){
+    para = `after ${pronoun} has paid child support of £${csa}`
+  }
+  if ((ssr != partner)&&(csr == partner)){
+    para = `after ${pronoun} has paid maintenance for ${dT.partnerName(ssr, data, true)} of £${ssa}`
+  }
+  if ((ssr != partner)&&(csr != partner)){
+    para = `after ${pronoun} has paid child support of £${csa} and maintenance for ${dT.partnerName(ssr, data, true)} of £${ssa}`;
+  }
+  return para;
+};
+
 function pensions(data, partner){
   let partnerData = data[`${partner}`];
   let para = '';
@@ -14,7 +36,7 @@ function pensions(data, partner){
 };
 
 function favouredPartner(data){
-  let split = data.case.case_finance.partner_a.split;
+  let split = data.case.case_finance.partner_a.total_split;
   let partner_a = data.partner_a.first_name;
   let partner_b = data.partner_b.first_name;
   let paragraph = '';
@@ -82,69 +104,45 @@ function children(child_info){
 
 function relationshipStatus(partner_data){
   let pronoun = dT.toPronoun(partner_data.title);
+  let new_partner = partner_data.new_partner;
+  let good_health = partner_data.good_health;
+  let new_partner_cohabiting = partner_data.new_partner_cohabiting;
+  let new_partner_remarried = partner_data.new_partner_remarried;
+  let new_partner_remarriage_intended = partner_data.new_partner_remarriage_intended;
   let status;
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == false)&&(partner_data.new_partner_remarriage_intended == false)){
+  if ((new_partner)&&(good_health)&&(!new_partner_cohabiting)&&(!new_partner_remarried)&&(!new_partner_remarriage_intended)){
     status = 'and has a new partner.';
   }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == true )&&(partner_data.new_partner_remarried == false)&&(partner_data.new_partner_remarriage_intended == false)){
+  if ((new_partner)&&(good_health)&&(new_partner_cohabiting)&&(!new_partner_remarried)&& (!new_partner_remarriage_intended)){
     status = 'and has a new partner. They are now cohabiting and don\'t yet intend to marry.';
   }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == true )&&(partner_data.new_partner_remarried == false)&&(partner_data.new_partner_remarriage_intended == true)){
+  if ((new_partner)&&(good_health)&&(new_partner_cohabiting)&&(!new_partner_remarried)&&(new_partner_remarriage_intended)){
     status = 'and has a new partner. They are now cohabiting and intend to marry.';
   }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == true )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == false)){
+  if ((new_partner)&&(good_health)&&(new_partner_cohabiting)&&(new_partner_remarried)&&(!new_partner_remarriage_intended)){
     status = 'and has a new partner. They are now cohabiting and have married.';
   }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == true )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == true)){
-    status = 'and has a new partner. They are now cohabiting and have married.';
+  if ((new_partner)&&(good_health)&&(!new_partner_cohabiting)&&(new_partner_remarried)&&(!new_partner_remarriage_intended)){
+    status = 'and has a new partner. They have now married.';
   }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == true)){
-    status = 'and has a new partner. They are now cohabiting and have married.';
+  if ((new_partner)&&(good_health)&&(!new_partner_cohabiting)&&(!new_partner_remarried)&&(new_partner_remarriage_intended)){
+    status = 'and has a new partner. They are not cohabiting and plan to get married.';
   }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == true)){
+  if ((new_partner)&&(good_health)&&(!new_partner_cohabiting )&&(new_partner_remarried )&&(new_partner_remarriage_intended)){
     status = 'and has a new partner. They have got married.';
   }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == false)){
-    status = 'and has a new partner. They have got married.';
+if ((new_partner)&&(good_health)&&(!new_partner_cohabiting )&&(new_partner_remarried)&&(!new_partner_remarriage_intended)){
+    status = 'and has a new partner. They have got married but are not cohabiting.';
   }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == false)&&(partner_data.new_partner_remarriage_intended == true)){
-    status = 'and has a new partner. They intend to marry.';
-  }
-  if ((partner_data.new_partner == false)&&(partner_data.good_health)){
+
+  if ((!new_partner)&&(good_health)){
     status = 'and does not have a new partner.';
   }
-  if ((partner_data.new_partner == false)&&(partner_data.good_health==false)){
+  if ((!new_partner)&&(!good_health)){
     status = ` ${dT.capitalise(pronoun)} does not have a new partner.`;
   }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health == false)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == false)&&(partner_data.new_partner_remarriage_intended == false)){
+  if ((new_partner)&&(!good_health)&&(!new_partner_cohabiting )&&(!new_partner_remarried)&&(!new_partner_remarriage_intended)){
     status = `${dT.capitalise(pronoun)} has a new partner.`;
-  }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == true )&&(partner_data.new_partner_remarried == false)&&(partner_data.new_partner_remarriage_intended == false)){
-    status = `${dT.capitalise(pronoun)} has a new partner. They are now cohabiting and don\'t yet intend to marry.`;
-  }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == true )&&(partner_data.new_partner_remarried == false)&&(partner_data.new_partner_remarriage_intended == true)){
-    status =  `${dT.capitalise(pronoun)} has a new partner. They are now cohabiting and intend to marry.`;
-  }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == true )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == false)){
-    status = `${dT.capitalise(pronoun)} has a new partner. They are now cohabiting and have married.`;
-  }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == true )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == true)){
-    status = `${dT.capitalise(pronoun)} has a new partner. They are now cohabiting and have married.`;
-  }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == true)){
-    status = `${dT.capitalise(pronoun)} has a new partner. They are now cohabiting and have married.`;
-  }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == true)){
-    status = `${dT.capitalise(pronoun)} has a new partner. They have got married.`;
-  }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == true)&&(partner_data.new_partner_remarriage_intended == false)){
-    status = `${dT.capitalise(pronoun)} has a new partner. They have got married.`;
-  }
-  if ((partner_data.new_partner == true)&&(partner_data.good_health)&&(partner_data.new_partner_cohabiting == false )&&(partner_data.new_partner_remarried == false)&&(partner_data.new_partner_remarriage_intended == true)){
-    status = `${dT.capitalise(pronoun)} has a new partner. They intend to marry.`;
-  }
-  if ((partner_data.new_partner == false)&&(partner_data.good_health)){
-    status = 'and does not have a new partner.';
   }
   return status;
 }
@@ -154,16 +152,16 @@ function health(data, partner){
   let healthBoolean = partner_data.good_health;
   let pronoun = dT.toPronoun(partner_data.title);
   let phrase;
-  if ((partner == 'a') && (healthBoolean == true)){
+  if ((partner == 'a') && (healthBoolean)){
     phrase = 'is in good health';
   }
   if ((partner == 'a') && (healthBoolean == false)){
     return `${dT.capitalise(pronoun)} has health troubles concerning ${ill_health_description}`;
   }
-  if ((partner == 'b') && (data.partner_a.good_health == true)){
-    phrase = 'too is in good health';
-  }
-  if ((partner == 'b') && (data.partner_a.good_health == false)){
+  // if (partner == 'b'){
+  //   phrase = 'too is in good health';
+  // }
+  if ((partner == 'b')&& (healthBoolean)){
     phrase = 'is in good health';
   }
   if ((partner == 'b') && (data.partner_b.good_health == false)){
@@ -173,10 +171,10 @@ function health(data, partner){
 };
 
 function courtOrders(case_info){
-  if (case_info.court_orders == false){
+  if (!case_info.court_orders){
     let paragraph =  'We have not been involved in any court proceedings and there are no court orders in force.';
     return 'We have not been involved in any court proceedings and there are no court orders in force.';
-  } else if (case_info.court_orders == true){
+  } else if (case_info.court_orders){
     let paragraph = `${case_info.court_order_info}`;
     return paragraph;
   }
@@ -208,10 +206,10 @@ function childList(array){
 }
 
 function legalAdvice(legal_advice){
-  if (legal_advice == true) {
+  if (legal_advice) {
     let para = 'We have both been informed of the importance of obtaining legal advice during mediation and have both taken advice.'
     return para
-  } else if (legal_advice == false){
+  } else if (!legal_advice){
     let para = '// ---> Legal advice has been declined - please expand on this here <--- // e.g. We have both been informed of the importance of obtaining legal advice during mediation but we have chosen not to take advice.'
     return para
   }
@@ -226,5 +224,6 @@ export default {
   courtOrders,
   legalAdvice,
   favouredPartner,
-  pensions
+  pensions,
+  support
 }

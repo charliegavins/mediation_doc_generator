@@ -146,16 +146,27 @@ function ageFromDoB(dateString){
 };
 
 function numberWithCommas(number) {
+  if (typeof number == 'number'){
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  } else {
+    return '';
+  }
+
 };
 
-function payeeGender(partner, data){
+function payeeGender(partner, data, boolean){
   let partnerSelect;
-  if (partner == 'partner_a'){
+  if ((partner == 'partner_a')&&(boolean == false)){
     partnerSelect = data.partner_b;
   }
-  if (partner == 'partner_b'){
+  if ((partner == 'partner_b')&&(boolean == false)){
     partnerSelect = data.partner_a;
+  }
+  if ((partner == 'partner_a')&&(boolean == true)){
+    partnerSelect = data.partner_a;
+  }
+  if ((partner == 'partner_b')&&(boolean == true)){
+    partnerSelect = data.partner_b;
   }
   let pronoun = toPronoun(partnerSelect.title);
   return pronoun;
@@ -203,13 +214,28 @@ function partnerName(partner, data, boolean){
     name = data.partner_a.first_name;
     return name;
   }
-  if (partner == 'partner_a'){
+  if ((partner == 'partner_a')&&(boolean == true)){
     name = data.partner_a.first_name;
     return name;
   }
-  if (partner == 'partner_b'){
+  if ((partner == 'partner_b')&&(boolean == true)){
     name = data.partner_b.first_name;
     return name;
+  }
+};
+
+function childSupport(recipient, amount, column){
+  if (recipient == column){
+    return amount;
+  } else {
+    return 0;
+  }
+};
+function spousalSupport(recipient, amount, column){
+  if (recipient == column){
+    return amount;
+  } else {
+    return 0;
   }
 };
 
@@ -224,5 +250,7 @@ export default {
   numberWithCommas,
   partnerName,
   payeeGender,
-  supportCalc
+  supportCalc,
+  childSupport,
+  spousalSupport
 }
