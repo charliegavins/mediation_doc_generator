@@ -10,7 +10,7 @@ import dT from './dataTransform';
 import tG from './textGenerator';
 import { templateBinary } from './templateBinary';
 
-export default function docxGen(data, template){
+export default function docxGen(data){
   template = atob(templateBinary);
   var zip = new JSZip(template);
   var doc= new Docxtemplater().loadZip(zip)
