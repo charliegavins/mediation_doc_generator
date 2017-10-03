@@ -5,12 +5,12 @@
   "main": "server.js",
   "repository": "git@github.com:StephenGrider/ReduxSimpleStarter.git",
   "scripts": {
-    "build": "webpack --progress",
-    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack-dev-server --open --config webpack.dev.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch",
     "babel": "babel",
-    "webpack": "webpack"
+    "webpack": "webpack --config webpack.prod.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,7 +27,8 @@
     "mocha": "^2.4.5",
     "react-addons-test-utils": "^0.14.7",
     "webpack": "^1.12.9",
-    "webpack-dev-server": "^1.14.0"
+    "webpack-dev-server": "^1.14.0",
+    "webpack-merge": "^4.1.0"
   },
   "dependencies": {
     "axios": "^0.16.2",
