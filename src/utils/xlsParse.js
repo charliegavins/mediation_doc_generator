@@ -246,7 +246,6 @@ case: {
   return parsedData;
 };
 
-
 export default {
   xlsParse
 }
