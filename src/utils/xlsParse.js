@@ -5,11 +5,13 @@ import dT from './dataTransform';
 import ntow from 'number-to-words';
 import _ from 'lodash';
 
-export default function xlsParse(fileBinary){
+
+
+function xlsParse(fileBinary){
   const workbook = XLSX.read(fileBinary, {type: 'binary'});
   const first_sheet_name = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[first_sheet_name];
-  const MoUInput = {
+  const parsedData = {
     doc:{
         footer_date: (getCellValue('D5', 7, 'DD-MM-YY')),
     },
@@ -32,7 +34,10 @@ case: {
   court_order_info: getCellValue('D12', 7),
   commenced_divorce: getCellValue('D13', 7),
   court_fees_responsibility: getCellValue('D14', 7),
-  family_home_address: getCellValue('H2', 7),
+  family_home_address_line_1: getCellValue('H5', 7),
+  family_home_address_line_2: getCellValue('H6', 7),
+  family_home_address_line_3: getCellValue('H7', 7),
+  family_home_address_postcode: getCellValue('H8', 7),
   outstanding_mortgage: getCellValue('H4', 7),
   child_info: parseChildren(),
   case_finance: {
@@ -212,29 +217,36 @@ case: {
     const worksheet = workbook.Sheets[workbook.SheetNames[sheetNumber]];
     const desired_cell = worksheet[cellAddress];
     let desired_value = (desired_cell ? desired_cell.v : undefined);
+    desired_value = formatRawCellValues(desired_value, dateFormat);
+    return desired_value;
+  }
 
-
-    if (desired_value == undefined){
-      output_value = undefined;
-    }
-    //if cell format is a date ('d' passed through as an argument) and a check whether it is a number, then take the excel date format, and parse it into a moment date.
-    if (dateFormat && (typeof desired_value == 'number') && (desired_value != 0)){
-      output_value = dT.parseDate(desired_value, dateFormat);
-    }
-    if ((desired_value == 'partner_a') || (desired_value == 'partner_b')){
+  //format inputs.
+  //  - if date: format into requested dateFormat (including age)
+  //  - if string: capitalise
+  function formatRawCellValues(desired_value, dateFormat){
+  let output_value;
+    if (_.isNumber(desired_value)){
+      if (dateFormat){
+        if (desired_value != 0) {
+          output_value = dT.parseDate(desired_value, dateFormat);
+        }
+      } else {
+        output_value = _.round((desired_value), 2);
+      }
+    } else if (desired_value == 'partner_a' || desired_value == 'partner_b') {
       output_value = desired_value;
-    }
-    if (_.isString(desired_value) && (desired_value != 'partner_a')&&(desired_value != 'partner_b')){
+    } else if (_.isString(desired_value)){
       output_value = dT.capitalise(desired_value);
-    }
-    if (_.isNumber(desired_value) && (!dateFormat)){
-      output_value = _.round((desired_value), 2);
-    }
-    if (_.isBoolean(desired_value)){
+    } else if (_.isBoolean(desired_value)){
       output_value = desired_value;
     }
     return output_value;
   }
+  return parsedData;
+};
 
-return MoUInput;
+
+export default {
+  xlsParse
 }

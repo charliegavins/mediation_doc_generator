@@ -4,9 +4,10 @@ import docxGen from '../utils/docxGen';
 
 export const IMPORT_FILE = 'import_file';
 const ROOT_URL = 'http://localhost:3000/api/assets/';
+let data = {};
 
 export function importFile(fileBinary){
-  const data = xlsParse(fileBinary);
+  data = xlsParse.xlsParse(fileBinary);
   const docxTemplate = axios.get(`${ROOT_URL}docx_template`);
   docxTemplate.then(function(res){
     let template = res.data;

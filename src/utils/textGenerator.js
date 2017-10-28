@@ -35,6 +35,30 @@ function pensions(data, partner){
     return para;
 };
 
+function ageParse(ageInYears){
+  //if person is days old, 'return X days old'
+  //if person is months old, 'return X months old'
+  //if person is one month old, 'return X month old'
+  //if person is 2+ months old, 'return X months old'
+  //if person is 1 year old 'return X year old'
+  //if person is 2+ years old 'return X years old'
+  if (ageInYears>=2){
+    return `${ageInYears} years of age`
+  } else if (ageInYears==1) {
+    return `${ageInYears} year of age`
+  }else if (ageInYears<1) {
+    let ageInMonths = moment().diff(date, 'months');
+    if (ageInMonths=1){
+      return `${ageInMonths} month old`
+    }else if (ageInMonths>1){
+      return `${ageInMonths} months old`
+    } else if (ageInMonths<=1){
+      let ageInDays = moment().diff(date, 'days');
+      return `${ageInDays} days old`
+    }
+  }
+}
+
 function favouredPartner(data){
   let split = data.case.case_finance.partner_a.total_split;
   let partner_a = data.partner_a.first_name;
@@ -225,5 +249,6 @@ export default {
   legalAdvice,
   favouredPartner,
   pensions,
-  support
+  support,
+  ageParse
 }
