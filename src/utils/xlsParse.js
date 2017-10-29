@@ -5,8 +5,6 @@ import dT from './dataTransform';
 import ntow from 'number-to-words';
 import _ from 'lodash';
 
-
-
 function xlsParse(fileBinary){
   const workbook = XLSX.read(fileBinary, {type: 'binary'});
   const first_sheet_name = workbook.SheetNames[0];
@@ -23,8 +21,9 @@ function xlsParse(fileBinary){
 case: {
   case_number: getCellValue('D2', 7),
   number_of_sessions: dT.capitalise(ntow.toWords(getCellValue('D3', 7))),
-  date_of_mediation_start: (getCellValue('D4', 7, 'Do MMMM YYYY')),
-  date_of_mediation_end: (getCellValue('D5', 7, 'Do MMMM YYYY')),
+  date_of_mediation_start: getCellValue('D4', 7, 'Do MMMM YYYY'),
+  date_of_mediation_end: getCellValue('D5', 7, 'Do MMMM YYYY'),
+  footer_date: getCellValue('D5', 7, 'DD[-]MM[-]YY'),
   legal_advice: getCellValue('D6', 7),
   date_married: getCellValue('D7', 7, 'Do MMMM YYYY'),
   date_cohabited: getCellValue('D8', 7, 'MMMM YYYY'),

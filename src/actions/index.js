@@ -3,21 +3,25 @@ import xlsParse from '../utils/xlsParse';
 import docxGen from '../utils/docxGen';
 
 export const IMPORT_FILE = 'import_file';
+export const GET_BINARY = 'get_binary';
 const ROOT_URL = 'http://localhost:3000/api/assets/';
-let data = {};
+export let data = {};
 
 export function importFile(fileBinary){
   data = xlsParse.xlsParse(fileBinary);
-  const docxTemplate = axios.get(`${ROOT_URL}docx_template`);
-  docxTemplate.then(function(res){
-    let template = res.data;
-    docxGen(data, template);
-  }, function(err){
-    console.log('template fetch failed');
-  });
-
+  docxGen();
   return {
     type: IMPORT_FILE,
     payload: data
   }
 }
+export function getBinary(){
+
+  return {
+    type: GET_BINARY,
+    payload: data
+  }
+}
+
+
+//set up to get binary from local JS file - commented out code retrieves binary from server - left in for testing purposes.

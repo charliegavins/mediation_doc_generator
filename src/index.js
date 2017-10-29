@@ -6,20 +6,12 @@ import promiseMiddleware from 'redux-promise-middleware';
 
 import DropFile from './components/dropfile';
 import StatusLog from './components/statusLog';
+import GetBinary from './components/getbinary';
 import reducers from './reducers';
-
-// const logger = store => next => action => {
-//   console.group(action.type)
-//   console.info('dispatching', action)
-//   let result = next(action)
-//   console.log('next state', store.getState())
-//   console.groupEnd(action.type)
-//   return result
-// }
 
 const createStoreWithMiddleware = applyMiddleware(promiseMiddleware())(createStore);
 
-const store = createStoreWithMiddleware(
+export const store = createStoreWithMiddleware(
   reducers,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
@@ -29,17 +21,7 @@ ReactDOM.render(
     <div>
     <DropFile />
     <StatusLog />
+    <GetBinary />
     </div>
   </Provider>
   , document.querySelector('.container'));
-
-
-///speed test for app:
-// function someMethodIThinkMightBeSlow() {
-//     const startTime = performance.now();
-//
-//     // Do the normal stuff for this function
-//
-//     const duration = performance.now() - startTime;
-//     console.log(`someMethodIThinkMightBeSlow took ${duration}ms`);
-// }

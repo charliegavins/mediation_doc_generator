@@ -1,6 +1,7 @@
 import moment from 'moment';
 import XLSX from 'xlsx';
 import _ from 'lodash';
+import { data } from "../actions/index";
 
 //concat case truncated address for MOU
 function concatAddress(Case){
@@ -48,7 +49,8 @@ function parseDate(dateCode, requiredDateFormat){
   }
 }
 
-function fileName(data){
+//determines file name for generated document
+function fileName(){
   if (data.partner_a.last_name == data.partner_b.last_name){
   return `${data.case.case_number} ${data.partner_a.last_name} MOU.docx`
 } else {
@@ -56,7 +58,8 @@ function fileName(data){
 }
 }
 
-function footerInfo(data){
+//determines footer for generated document
+function footerInfo(){
   if (data.partner_a.last_name == data.partner_b.last_name){
   return `case:${data.case.case_number} ${data.partner_a.last_name}`;
 } else {
@@ -84,7 +87,7 @@ function numberWithCommas(number) {
   }
 };
 
-function payeeGender(partner, data, boolean){
+function payeeGender(partner, boolean){
   let partnerSelect;
   if (partner == 'partner_a'){
     if (boolean) {
@@ -103,40 +106,40 @@ function payeeGender(partner, data, boolean){
   return pronoun;
 };
 
-function supportCalc(data, io, rp){
-  let figure;
-  if ((io == 'i')&&(rp == 'r')){
-    let recipient = data.case.case_finance.child_support_recipient;
-    figure = data[`${recipient}`].personal_finance.net_monthly_income;
-    return numberWithCommas(figure);
-  }
-  if ((io == 'o')&&(rp == 'r')){
-    let recipient = data.case.case_finance.child_support_recipient;
-    figure = data[`${recipient}`].personal_finance.monthly_outgoings;
-    return numberWithCommas(figure);
-  }
-  if ((io == 'i')&&(rp == 'p')){
-    let recipient = data.case.case_finance.child_support_recipient;
-    if (recipient == 'partner_a'){
-      figure = data.partner_b.personal_finance.net_monthly_income;
-    } else if (recipient == 'partner_b') {
-      figure = data.partner_a.personal_finance.net_monthly_income;
-    }
-    return numberWithCommas(figure);
-  }
-  if ((io == 'o')&&(rp == 'p')){
-    let recipient = data.case.case_finance.child_support_recipient;
-    if (recipient == 'partner_a'){
-      figure = data.partner_b.personal_finance.monthly_outgoings;
-    } else if (recipient == 'partner_b') {
-      figure = data.partner_a.personal_finance.monthly_outgoings;
-    }
-    return numberWithCommas(figure);
-  }
-};
+// function supportCalc(io, rp){
+//   let figure;
+//   if ((io == 'i')&&(rp == 'r')){
+//     let recipient = data.case.case_finance.child_support_recipient;
+//     figure = data[`${recipient}`].personal_finance.net_monthly_income;
+//     return numberWithCommas(figure);
+//   }
+//   if ((io == 'o')&&(rp == 'r')){
+//     let recipient = data.case.case_finance.child_support_recipient;
+//     figure = data[`${recipient}`].personal_finance.monthly_outgoings;
+//     return numberWithCommas(figure);
+//   }
+//   if ((io == 'i')&&(rp == 'p')){
+//     let recipient = data.case.case_finance.child_support_recipient;
+//     if (recipient == 'partner_a'){
+//       figure = data.partner_b.personal_finance.net_monthly_income;
+//     } else if (recipient == 'partner_b') {
+//       figure = data.partner_a.personal_finance.net_monthly_income;
+//     }
+//     return numberWithCommas(figure);
+//   }
+//   if ((io == 'o')&&(rp == 'p')){
+//     let recipient = data.case.case_finance.child_support_recipient;
+//     if (recipient == 'partner_a'){
+//       figure = data.partner_b.personal_finance.monthly_outgoings;
+//     } else if (recipient == 'partner_b') {
+//       figure = data.partner_a.personal_finance.monthly_outgoings;
+//     }
+//     return numberWithCommas(figure);
+//   }
+// };
 
 //takes the argument 'partner_a' or 'partner_b', alongside the data, and a boolean. If the boolean is false, then function returns the opposite partner. i.e. arg= 'partner_a' whos name = Penny, returns partner_b's name, Andrew
-function partnerName(partner, data, boolean){
+function partnerName(partner, boolean){
   if ((partner == 'partner_a')&&(boolean == false)){
     name = data.partner_b.first_name;
     return name;
@@ -180,7 +183,6 @@ export default {
   numberWithCommas,
   partnerName,
   payeeGender,
-  supportCalc,
   childSupport,
   spousalSupport,
   concatAddress

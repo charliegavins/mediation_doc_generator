@@ -9,11 +9,12 @@ import ntow from 'number-to-words';
 import dT from './dataTransform';
 import tG from './textGenerator';
 import { templateBinary } from './templateBinary';
+import { data } from "../actions/index";
 
-export default function docxGen(data, template){
+export default function docxGen(template){
   template = atob(templateBinary);
-  var zip = new JSZip(template);
-  var doc= new Docxtemplater().loadZip(zip)
+  let zip = new JSZip(template);
+  let doc= new Docxtemplater().loadZip(zip)
   let Case = data.case;
   let Partner_a = data.partner_a;
   let Partner_b = data.partner_b;
@@ -82,15 +83,15 @@ export default function docxGen(data, template){
       asset_split_b: Case.case_finance.partner_b.total_split*100,
       pensions_split_a: Math.round(Case.case_finance.partner_a.pensions.split*100),
       pensions_split_b: Math.round(Case.case_finance.partner_b.pensions.split*100),
-      footer_date: doc.footer_date,
-      footer_info: dT.footerInfo(data),
-      favoured_partner: tG.favouredPartner(data),
+      footer_date: Case.footer_date,
+      footer_info: dT.footerInfo(),
+      favoured_partner: tG.favouredPartner(),
       child_paragraph: tG.children(Case.child_info),
-      health_a: tG.health(data, 'a'),
-      health_b: tG.health(data, 'b'),
+      health_a: tG.health('a'),
+      health_b: tG.health('b'),
       relationship_status_a: tG.relationshipStatus(Partner_a),
       relationship_status_b: tG.relationshipStatus(Partner_b),
-      living_arrangements_paragraph: tG.livingArrangements(data),
+      living_arrangements_paragraph: tG.livingArrangements(),
       court_orders_paragraph: tG.courtOrders(Case),
       child_list: tG.childList(Case.child_info),
       legal_advice_para: tG.legalAdvice(Case.legal_advice),
@@ -104,30 +105,23 @@ export default function docxGen(data, template){
       child_support_a: dT.numberWithCommas(child_support_a),
       child_support_b: dT.numberWithCommas(child_support_b),
       child_support_amount: Case.case_finance.child_support_amount,
-      child_support_recipient: dT.partnerName(Case.case_finance.child_support_recipient, data, true),
-      child_support_payee: dT.partnerName(Case.case_finance.child_support_recipient, data, false),
+      child_support_recipient: dT.partnerName(Case.case_finance.child_support_recipient, true),
+      child_support_payee: dT.partnerName(Case.case_finance.child_support_recipient, false),
       spousal_support_a: dT.numberWithCommas(spousal_support_a),
       spousal_support_b: dT.numberWithCommas(spousal_support_b),
       support_total_a: dT.numberWithCommas(support_total_a),
       support_total_b: dT.numberWithCommas(support_total_b),
       spousal_support_amount: Case.case_finance.spousal_support_amount,
-      spousal_support_recipient: dT.partnerName(Case.case_finance.spousal_support_recipient, data),
-      spousal_support_payee: dT.partnerName(Case.case_finance.spousal_support_recipient, data, false),
-      partner_a_pensions_para: tG.pensions(data, 'partner_a'),
-      partner_b_pensions_para: tG.pensions(data, 'partner_b'),
-      commenced_divorce: dT.partnerName(Case.commenced_divorce, data, true),
-      not_commenced_divorce: dT.partnerName(Case.commenced_divorce, data, false),
+      spousal_support_recipient: dT.partnerName(Case.case_finance.spousal_support_recipient),
+      spousal_support_payee: dT.partnerName(Case.case_finance.spousal_support_recipient, false),
+      partner_a_pensions_para: tG.pensions('partner_a'),
+      partner_b_pensions_para: tG.pensions('partner_b'),
+      commenced_divorce: dT.partnerName(Case.commenced_divorce, true),
+      not_commenced_divorce: dT.partnerName(Case.commenced_divorce, false),
       court_fees_responsibility: Case.court_fees_responsibility,
-      //net monthly income for reciever of support
-      // net_monthly_income_r: dT.supportCalc(data, 'i', 'r'),
-      // //net monthly outgoings for reciever of support
-      // net_monthly_outgoings_r: dT.supportCalc(data, 'o', 'r'),
-      // //net monthly income for payer of support
-      // net_monthly_income_p: dT.supportCalc(data, 'i', 'p'),
-      // //net monthly outgoings for payer of support
-      // net_monthly_outgoings_p: dT.supportCalc(data, 'o', 'p'),
-      support_para_a: tG.support(data, 'partner_a'),
-      support_para_b: tG.support(data, 'partner_b'),
+
+      support_para_a: tG.support('partner_a'),
+      support_para_b: tG.support('partner_b'),
       employment_income_net_a: dT.numberWithCommas(Partner_a.personal_finance.income.employment_income_net),
       self_employment_income_net_a: dT.numberWithCommas(Partner_a.personal_finance.income.self_employment_income_net),
       income_investments_rental_a: dT.numberWithCommas(Partner_a.personal_finance.income.income_investments_rental),
@@ -162,7 +156,6 @@ export default function docxGen(data, template){
       shortfall_surplus_b: dT.numberWithCommas(Partner_a.personal_finance.shortfall_surplus)
   };
   doc.setData(docObject);
-
       try {
           // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
           doc.render()
