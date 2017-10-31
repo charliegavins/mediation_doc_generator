@@ -14,17 +14,22 @@ module.exports = {
     filename: '[name].[chunkhash].js'
   },
   module: {
+    loaders: [{
+      exclude: /node_modules/,
+      loader: 'babel',
+      query: {
+        presets: ['react', 'es2015', 'stage-1']
+      }
+    }],
     rules: [
-      {
-        use: 'babel-loader',
-        test: /\.js$/,
-        exclude: /node_modules/
-      },
       {
         use: ['style-loader', 'css-loader'],
         test: /\.css$/
       }
     ]
+  },
+  resolve: {
+    extensions: ['', '.js', '.jsx']
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
