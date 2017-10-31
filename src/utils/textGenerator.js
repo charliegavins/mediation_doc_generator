@@ -1,14 +1,15 @@
 import ntow from 'number-to-words';
-import dT from './dataTransform'
+import dT from './dataTransform';
+import { data } from "../actions/index";
 
 
-function support(data, partner){
+function support(partner){
   let para = '';
   let csa = dT.numberWithCommas(data.case.case_finance.child_support_amount);
   let csr = data.case.case_finance.child_support_recipient;
   let ssa = dT.numberWithCommas(data.case.case_finance.spousal_support_amount);
   let ssr = data.case.case_finance.spousal_support_recipient;
-  let pronoun = dT.payeeGender(partner, data, true);
+  let pronoun = dT.payeeGender(partner, true);
   if ((ssr == partner)&&(csr == partner)){
     para = ``;
   }
@@ -16,15 +17,15 @@ function support(data, partner){
     para = `after ${pronoun} has paid child support of £${csa}`
   }
   if ((ssr != partner)&&(csr == partner)){
-    para = `after ${pronoun} has paid maintenance for ${dT.partnerName(ssr, data, true)} of £${ssa}`
+    para = `after ${pronoun} has paid maintenance for ${dT.partnerName(ssr, true)} of £${ssa}`
   }
   if ((ssr != partner)&&(csr != partner)){
-    para = `after ${pronoun} has paid child support of £${csa} and maintenance for ${dT.partnerName(ssr, data, true)} of £${ssa}`;
+    para = `after ${pronoun} has paid child support of £${csa} and maintenance for ${dT.partnerName(ssr, true)} of £${ssa}`;
   }
   return para;
 };
 
-function pensions(data, partner){
+function pensions(partner){
   let partnerData = data[`${partner}`];
   let para = '';
   if (partnerData.personal_finance.pension){
@@ -35,7 +36,31 @@ function pensions(data, partner){
     return para;
 };
 
-function favouredPartner(data){
+function ageParse(ageInYears){
+  //if person is days old, 'return X days old'
+  //if person is months old, 'return X months old'
+  //if person is one month old, 'return X month old'
+  //if person is 2+ months old, 'return X months old'
+  //if person is 1 year old 'return X year old'
+  //if person is 2+ years old 'return X years old'
+  if (ageInYears>=2){
+    return `${ageInYears} years of age`
+  } else if (ageInYears==1) {
+    return `${ageInYears} year of age`
+  }else if (ageInYears<1) {
+    let ageInMonths = moment().diff(date, 'months');
+    if (ageInMonths=1){
+      return `${ageInMonths} month old`
+    }else if (ageInMonths>1){
+      return `${ageInMonths} months old`
+    } else if (ageInMonths<=1){
+      let ageInDays = moment().diff(date, 'days');
+      return `${ageInDays} days old`
+    }
+  }
+}
+
+function favouredPartner(){
   let split = data.case.case_finance.partner_a.total_split;
   let partner_a = data.partner_a.first_name;
   let partner_b = data.partner_b.first_name;
@@ -51,7 +76,7 @@ function favouredPartner(data){
   }
 }
 
-function livingArrangements(data){
+function livingArrangements(){
   if (data.case.cohabiting==true){
     if(data.partner_a.address){
       let paragraph = `During mediation we have been living separately in the marital home, ${data.partner_a.address}`;
@@ -147,7 +172,7 @@ if ((new_partner)&&(good_health)&&(!new_partner_cohabiting )&&(new_partner_remar
   return status;
 }
 
-function health(data, partner){
+function health(partner){
   let partner_data = data[`partner_${partner}`];
   let healthBoolean = partner_data.good_health;
   let pronoun = dT.toPronoun(partner_data.title);
@@ -225,5 +250,6 @@ export default {
   legalAdvice,
   favouredPartner,
   pensions,
-  support
+  support,
+  ageParse
 }
