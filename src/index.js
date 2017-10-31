@@ -9,19 +9,20 @@ import StatusLog from './components/statusLog';
 import GetBinary from './components/getbinary';
 import reducers from './reducers';
 
-const createStoreWithMiddleware = applyMiddleware(promiseMiddleware())(createStore);
+const App = () => {
 
-export const store = createStoreWithMiddleware(
-  reducers,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+  const createStoreWithMiddleware = applyMiddleware(promiseMiddleware())(createStore);
 
-ReactDOM.render(
-  <Provider store={store}>
-    <div>
+  const store = createStoreWithMiddleware(
+    reducers,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
+
+  return (
+    <Provider store={store}>
     <DropFile />
-    <StatusLog />
-    <GetBinary />
-    </div>
   </Provider>
-  , document.querySelector('.container'));
+);
+}
+
+ReactDOM.render(<App />, document.querySelector('.container'));
