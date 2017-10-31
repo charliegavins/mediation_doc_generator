@@ -5,10 +5,17 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 const VENDOR_LIBS = ['react'];
 
 module.exports = {
+<<<<<<< HEAD
   entry: {
     bundle: './src/index.js',
     vendor: VENDOR_LIBS
   },
+=======
+  devtool: 'eval',
+  entry: [
+    './src/index.js'
+  ],
+>>>>>>> 53dceb2732b052743bdc28375df5cf5929e16fff
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].[chunkhash].js'
