@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const VENDOR_LIBS = [];
+const VENDOR_LIBS = ['react'];
 
 module.exports = {
   entry: {
@@ -14,29 +14,24 @@ module.exports = {
     filename: '[name].[chunkhash].js'
   },
   module: {
-    loaders: [{
-      exclude: /node_modules/,
-      loader: 'babel',
-      query: {
-        presets: ['react', 'es2015', 'stage-1']
-      }
-    }],
     rules: [
+      {
+    use: 'babel-loader',
+    test: /\.js$/,
+    exclude: /node_modules/
+  },
       {
         use: ['style-loader', 'css-loader'],
         test: /\.css$/
       }
     ]
   },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
-  },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
       name: ['vendor', 'manifest']
     }),
     new HtmlWebpackPlugin({
-      template: 'src/index.html'
+      template: 'index.html'
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
