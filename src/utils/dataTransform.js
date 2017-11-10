@@ -25,46 +25,48 @@ function toPronoun(input, type){
     'Mrs': 'she',
     'Ms': 'she'
   }
-  if(type == 'posses'){
-    return possess[input];
+  if(type == 'possess'){
+    return possess[input]
   } else {
-    return pronoun[input];
+    return pronoun[input]
   }
 }
 
-//Capitalise word (for beginning of sentence (Once) or name (Lucy) for example)
-function capitalise(string){
-return string.charAt(0).toUpperCase() + string.slice(1);
+// Capitalise word (for beginning of sentence (Once) or name (Lucy) for example)
+function capitalise (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
 };
 
-//excel date code --> XLSX object --> moment object --> requested date format
-function parseDate(dateCode, requiredDateFormat){
-  let semiParsedDate = XLSX.SSF.parse_date_code(dateCode);
+// excel date code --> XLSX object --> moment object --> requested date format
+function parseDate (dateCode, requiredDateFormat) {
+  let semiParsedDate = XLSX.SSF.parse_date_code(dateCode)
   let semiParsedDateString = `${semiParsedDate['d']}-${semiParsedDate['m']}-${semiParsedDate['y']}`
-  let parsedDate = moment(semiParsedDateString, 'D-M-YYYY');
-  if (requiredDateFormat == 'age'){
-    return moment().diff(parsedDate, 'years');
+  let parsedDate = moment(semiParsedDateString, 'D-M-YYYY')
+  if (requiredDateFormat === 'age') {
+    return moment().diff(parsedDate, 'years')
   } else {
-    return moment(parsedDate).format(requiredDateFormat);
+    return moment(parsedDate).format(requiredDateFormat)
   }
 }
 
-//determines file name for generated document
-function fileName(){
-  if (data.partner_a.last_name == data.partner_b.last_name){
-  return `${data.case.case_number} ${data.partner_a.last_name} MOU.docx`
-} else {
-  return `${data.case.case_number} ${data.partner_a.last_name} ${data.partner_b.last_name} MOU.docx`
-}
+// determines file name for generated document
+
+function fileName () {
+  if (data.partner_a.last_name === data.partner_b.last_name) {
+    return `${data.case.case_number} ${data.partner_a.last_name} MOU.docx`
+  } else {
+    return `${data.case.case_number} ${data.partner_a.last_name} ${data.partner_b.last_name} MOU.docx`
+  }
 }
 
-//determines footer for generated document
+// determines footer for generated document
+
 function footerInfo(){
   if (data.partner_a.last_name == data.partner_b.last_name){
-  return `case:${data.case.case_number} ${data.partner_a.last_name}`;
-} else {
-  return `${data.case.case_number} ${data.partner_a.last_name} ${data.partner_b.last_name}`;
-}
+    return `case:${data.case.case_number} ${data.partner_a.last_name}`;
+  } else {
+    return `${data.case.case_number} ${data.partner_a.last_name} ${data.partner_b.last_name}`;
+  }
 };
 
 function doMMMMYYYY(momentDate){
